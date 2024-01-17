@@ -12,6 +12,7 @@ import SearchButton from './SearchButton';
 import SidebarContextProvider from './SidebarContextProvider';
 import SidebarMenu from './SidebarMenu';
 import SidebarRefWrapper from './SidebarRefWrapper';
+import { headers } from 'next/headers';
 
 const Logo = dynamic(() => import('./Logo'), {
   ssr: false,
@@ -20,6 +21,18 @@ const Logo = dynamic(() => import('./Logo'), {
 
 export default async function Sidebar() {
   const session = await getServerSideSession();
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/user/search`,
+    {
+      headers: headers()
+    }
+  );
+
+  const data = await response.json();
+
+  console.log(data);
+
   return (
     <SidebarContextProvider>
       <SidebarRefWrapper>

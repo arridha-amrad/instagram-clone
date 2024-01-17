@@ -18,6 +18,7 @@ export type IUser = {
   followers: mongoose.Types.ObjectId[];
   followings: mongoose.Types.ObjectId[];
   avatarPublicId?: string;
+  searchedUsers: mongoose.Types.ObjectId[];
 };
 
 export type IUserVirtuals = {
@@ -60,7 +61,8 @@ const schema = new mongoose.Schema<
         ref: 'User',
         type: mongoose.Schema.Types.ObjectId
       }
-    ]
+    ],
+    searchedUsers: [{ ref: 'User', type: mongoose.Schema.Types.ObjectId }]
   },
   {
     timestamps: true
