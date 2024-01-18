@@ -3,8 +3,8 @@
 import { Input, Spacer, Divider, Button, User } from '@nextui-org/react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import Item from './Item';
+import { useSidebarSearchContext } from './Context';
 
 const searchUser = async (key: string) => {
   try {
@@ -15,17 +15,6 @@ const searchUser = async (key: string) => {
     return data;
   } catch (error) {
     throw error;
-  }
-};
-
-const postSearchedUser = async (id: string, authId?: string) => {
-  try {
-    await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/search`, {
-      method: 'POST',
-      body: JSON.stringify({ id, authId })
-    });
-  } catch (err) {
-    throw err;
   }
 };
 
@@ -40,7 +29,7 @@ const SearchDialog = () => {
   const [search, setSearch] = useState('');
   const [key, setKey] = useState('');
   const [result, setResult] = useState<TSearchResult[]>([]);
-  const { data } = useSession();
+  const { savedSearch } = useSidebarSearchContext();
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -63,14 +52,6 @@ const SearchDialog = () => {
         });
     }
   }, [key]);
-
-  const defaultAvatar = `${process.env.NEXT_PUBLIC_URL}/default_profile.jpg`;
-
-  const router = useRouter();
-  const navigateAndSave = async (username: string, id: string) => {
-    router.push(`/${username}`);
-    await postSearchedUser(id, data?.user.id);
-  };
 
   return (
     <>
@@ -103,20 +84,9 @@ const SearchDialog = () => {
         </Button>
       </div>
       <div className="space-y-2 h-full">
-        {result.map(({ name, username, avatar, _id }) => (
-          <Button
-            variant="light"
-            onClick={async () => await navigateAndSave(username, _id)}
-            key={username}
-            className="px-4 w-full flex justify-start py-2  rounded-none h-max"
-          >
-            <User
-              avatarProps={{ src: avatar ?? defaultAvatar }}
-              name={username}
-              description={name}
-            />
-          </Button>
-        ))}
+        {!key
+          ? savedSearch.map((data) => <Item item={data} key={data._id} />)
+          : result.map((data) => <Item item={data} key={data._id} />)}
       </div>
     </>
   );

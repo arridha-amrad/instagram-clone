@@ -40,7 +40,7 @@ export default async function ProfileLayout({
   await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/${username}`).then(
     (data) =>
       data.json().then((data) => {
-        console.log('resp data : ', data);
+        // console.log('resp data : ', data);
       })
   );
   const { user } = (await response.json()) as { user: TProfileData | null };

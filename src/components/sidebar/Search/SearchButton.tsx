@@ -2,9 +2,9 @@
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/react';
-import { useSidebarContext } from './SidebarContext';
+import { useSidebarContext } from '../SidebarContext';
 import { createPortal } from 'react-dom';
-import SearchDialog from '../SearchDialog';
+import SearchDialog from './SearchDialog';
 
 export default function SearchButton() {
   const {
