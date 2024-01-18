@@ -11,10 +11,16 @@ export type TSearchResult = {
 
 type TSearchCache = {
   savedSearch: TSearchResult[];
+  add: (data: TSearchResult) => void;
+  remove: (data: TSearchResult) => void;
+  removeAll: VoidFunction;
 };
 
 const Context = createContext<TSearchCache>({
-  savedSearch: []
+  savedSearch: [],
+  add: () => {},
+  remove: () => {},
+  removeAll: () => {}
 });
 
 export const SidebarSearchProvider = ({
@@ -24,9 +30,25 @@ export const SidebarSearchProvider = ({
   children: ReactNode;
   savedSearchFromApi: TSearchResult[];
 }) => {
-  const [savedSearch] = useState(savedSearchFromApi);
+  const [savedSearch, setSavedSearch] = useState(savedSearchFromApi);
+  const add = (data: TSearchResult) => {
+    const idx = savedSearch.findIndex((val) => val._id === data._id);
+    const copy = [...savedSearch];
+    if (idx >= 0) {
+      copy.splice(idx, 1);
+    }
+    setSavedSearch(() => [data, ...copy]);
+  };
+  const remove = (data: TSearchResult) => {
+    setSavedSearch((val) => [...val].filter((item) => item._id !== data._id));
+  };
+  const removeAll = () => {
+    setSavedSearch(() => []);
+  };
   return (
-    <Context.Provider value={{ savedSearch }}>{children}</Context.Provider>
+    <Context.Provider value={{ savedSearch, removeAll, add, remove }}>
+      {children}
+    </Context.Provider>
   );
 };
 

@@ -5,6 +5,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import Item from './Item';
 import { useSidebarSearchContext } from './Context';
+import { useSession } from 'next-auth/react';
 
 const searchUser = async (key: string) => {
   try {
@@ -15,6 +16,17 @@ const searchUser = async (key: string) => {
     return data;
   } catch (error) {
     throw error;
+  }
+};
+
+const deleteSearchHistory = async (authId: string) => {
+  try {
+    await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/search/history`, {
+      method: 'DELETE',
+      body: JSON.stringify({ authId })
+    });
+  } catch (err) {
+    throw err;
   }
 };
 
@@ -29,7 +41,8 @@ const SearchDialog = () => {
   const [search, setSearch] = useState('');
   const [key, setKey] = useState('');
   const [result, setResult] = useState<TSearchResult[]>([]);
-  const { savedSearch } = useSidebarSearchContext();
+  const { savedSearch, removeAll } = useSidebarSearchContext();
+  const { data } = useSession();
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -52,6 +65,13 @@ const SearchDialog = () => {
         });
     }
   }, [key]);
+
+  const removeHistory = async () => {
+    if (data?.user.id) {
+      await deleteSearchHistory(data.user.id);
+    }
+    removeAll();
+  };
 
   return (
     <>
@@ -79,13 +99,20 @@ const SearchDialog = () => {
         <div>
           <h1 className="font-bold">Latest</h1>
         </div>
-        <Button variant="light" color="primary" className="font-bold">
+        <Button
+          onClick={removeHistory}
+          variant="light"
+          color="primary"
+          className="font-bold"
+        >
           Clear all
         </Button>
       </div>
       <div className="space-y-2 h-full">
         {!key
-          ? savedSearch.map((data) => <Item item={data} key={data._id} />)
+          ? savedSearch.map((data) => (
+              <Item isRemoveAble item={data} key={data._id} />
+            ))
           : result.map((data) => <Item item={data} key={data._id} />)}
       </div>
     </>
