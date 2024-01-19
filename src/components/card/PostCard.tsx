@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Button, Input } from "@nextui-org/react";
-import UserCardWithTime from "./UseCardWithTime";
-import Image from "next/image";
-import BookmarkIcon from "@heroicons/react/24/outline/BookmarkIcon";
-import HeartIcon from "@heroicons/react/24/outline/HeartIcon";
-import CommentIcon from "@heroicons/react/24/outline/ChatBubbleLeftIcon";
-import SendIcon from "@heroicons/react/24/outline/PaperAirplaneIcon";
-import { useCallback, useRef, useState } from "react";
-import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
-import { FaceSmileIcon } from "@heroicons/react/24/solid";
+import { Button, Input } from '@nextui-org/react';
+import UserCardWithTime from './UseCardWithTime';
+import Image from 'next/image';
+import BookmarkIcon from '@heroicons/react/24/outline/BookmarkIcon';
+import HeartIcon from '@heroicons/react/24/outline/HeartIcon';
+import CommentIcon from '@heroicons/react/24/outline/ChatBubbleLeftIcon';
+import SendIcon from '@heroicons/react/24/outline/PaperAirplaneIcon';
+import { useCallback, useRef, useState } from 'react';
+import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
+import { FaceSmileIcon } from '@heroicons/react/24/solid';
 
 export default function PostCard() {
   const [showMoreBtn, setShowMoreBtn] = useState(false);
@@ -33,7 +33,7 @@ export default function PostCard() {
     }
   }, []);
 
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
 
   function onClick(emojiData: EmojiClickData, event: MouseEvent) {
     setComment(
@@ -51,7 +51,7 @@ export default function PostCard() {
           width={1000}
           height={1000}
           priority
-          src="https://images.pexels.com/photos/18758628/pexels-photo-18758628/free-photo-of-a-highland-cow-on-a-field.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          src="https://images.pexels.com/photos/722036/pexels-photo-722036.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           alt="post"
         />
       </div>
@@ -76,7 +76,7 @@ export default function PostCard() {
 
       <p
         className={`${
-          showMoreText ? "" : "text-ellipsis overflow-hidden whitespace-nowrap"
+          showMoreText ? '' : 'text-ellipsis overflow-hidden whitespace-nowrap'
         }  xl:text-base text-sm w-full px-2`}
       >
         <span className="font-bold">arridhaamrad</span>&nbsp;&nbsp;Lorem ipsum
@@ -95,7 +95,7 @@ export default function PostCard() {
           variant="light"
           size="sm"
         >
-          {showMoreText ? "show less" : "show more"}
+          {showMoreText ? 'show less' : 'show more'}
         </Button>
       )}
       {showLess && (
@@ -107,7 +107,7 @@ export default function PostCard() {
           variant="light"
           size="sm"
         >
-          {showMoreText ? "show less" : "show more"}
+          {showMoreText ? 'show less' : 'show more'}
         </Button>
       )}
       <div className="flex relative px-2">

@@ -21,14 +21,13 @@ const Item = ({ item, isRemoveAble }: Props) => {
 
   const navigateAndSave = async (username: string, id: string) => {
     await postSearchedUser(id, data?.user.id);
-    add(item);
     router.push(`/${username}`);
+    add(item);
   };
 
   const deleteSearch = async () => {
-    console.log('delete id : ', _id);
-    remove(item);
     await removeHistory(_id, data?.user.id);
+    remove(item);
   };
 
   return (

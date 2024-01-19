@@ -9,16 +9,16 @@ export type IUser = {
   username: string;
   email: string;
   provider: string;
+  followers?: mongoose.Types.ObjectId[];
+  followings?: mongoose.Types.ObjectId[];
+  searchedUsers?: mongoose.Types.ObjectId[];
   avatar?: string;
   password?: string;
   occupation?: string;
   threadUsername?: string;
   bio?: string;
   web?: string;
-  followers: mongoose.Types.ObjectId[];
-  followings: mongoose.Types.ObjectId[];
   avatarPublicId?: string;
-  searchedUsers: mongoose.Types.ObjectId[];
 };
 
 export type IUserVirtuals = {
@@ -72,11 +72,11 @@ const schema = new mongoose.Schema<
 schema.plugin(mongooseLeanVirtuals);
 
 schema.virtual('totalFollowers').get(function () {
-  return this.followers.length;
+  return this.followers ? this.followers.length : 0;
 });
 
 schema.virtual('totalFollowings').get(function () {
-  return this.followings.length;
+  return this.followings ? this.followings.length : 0;
 });
 
 schema.virtual('id').get(function () {

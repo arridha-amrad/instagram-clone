@@ -1,48 +1,18 @@
 'use client';
 
-import { Input, Spacer, Divider, Button, User } from '@nextui-org/react';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { Input, Spacer, Divider, Button } from '@nextui-org/react';
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import Item from './Item';
-import { useSidebarSearchContext } from './Context';
-import { useSession } from 'next-auth/react';
-
-const searchUser = async (key: string) => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/user/search/${key}`
-    );
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const deleteSearchHistory = async (authId: string) => {
-  try {
-    await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/search/history`, {
-      method: 'DELETE',
-      body: JSON.stringify({ authId })
-    });
-  } catch (err) {
-    throw err;
-  }
-};
-
-type TSearchResult = {
-  _id: string;
-  username: string;
-  name: string;
-  avatar?: string;
-};
+import { TSearchResult } from './Context';
+import { searchUser } from './clientAction';
+import SearchHistory from './SearchHistory';
 
 const SearchDialog = () => {
   const [search, setSearch] = useState('');
   const [key, setKey] = useState('');
   const [result, setResult] = useState<TSearchResult[]>([]);
-  const { savedSearch, removeAll } = useSidebarSearchContext();
-  const { data } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -53,25 +23,22 @@ const SearchDialog = () => {
     };
   }, [search]);
 
-  useEffect(() => {
-    if (key) {
-      searchUser(key)
-        .then((data) => {
-          console.log('data : ', data);
-          setResult(data.users);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+  const initSearch = async () => {
+    setIsLoading(true);
+    try {
+      const data = await searchUser(key);
+      setResult(data.users);
+    } catch (err) {
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
-  }, [key]);
-
-  const removeHistory = async () => {
-    if (data?.user.id) {
-      await deleteSearchHistory(data.user.id);
-    }
-    removeAll();
   };
+
+  useEffect(() => {
+    if (!key) return;
+    initSearch();
+  }, [key]);
 
   return (
     <>
@@ -83,38 +50,48 @@ const SearchDialog = () => {
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          onClear={() => setSearch('')}
           size="sm"
           type="text"
           placeholder="Search"
           startContent={
             <MagnifyingGlassIcon className="w-5 h-5 pointer-events-none" />
           }
-          isClearable
+          endContent={
+            isLoading ? (
+              <Button
+                variant="light"
+                isDisabled
+                isIconOnly
+                isLoading={isLoading}
+                size="sm"
+              />
+            ) : (
+              <Button
+                isIconOnly
+                size="sm"
+                variant="light"
+                startContent={<XMarkIcon className="w-4 h-4" />}
+                onClick={() => setSearch('')}
+              />
+            )
+          }
         />
       </div>
       <Spacer y={4} />
       <Divider />
-      <div className="flex justify-between items-center px-4 py-2">
-        <div>
-          <h1 className="font-bold">Latest</h1>
+      {!key ? (
+        <SearchHistory />
+      ) : (
+        <div className="space-y-2 h-full">
+          {result.length === 0
+            ? !isLoading && (
+                <div className="text-center py-4">
+                  <p>No result</p>
+                </div>
+              )
+            : result.map((data) => <Item item={data} key={data._id} />)}
         </div>
-        <Button
-          onClick={removeHistory}
-          variant="light"
-          color="primary"
-          className="font-bold"
-        >
-          Clear all
-        </Button>
-      </div>
-      <div className="space-y-2 h-full">
-        {!key
-          ? savedSearch.map((data) => (
-              <Item isRemoveAble item={data} key={data._id} />
-            ))
-          : result.map((data) => <Item item={data} key={data._id} />)}
-      </div>
+      )}
     </>
   );
 };

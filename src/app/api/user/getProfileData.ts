@@ -25,10 +25,10 @@ export default async function getProfileData(username: string) {
       .exec()
       .then((data) => {
         if (!data) return null;
-        const following = data.followers.find(
+        const following = data.followers?.find(
           (followers) => followers.toString() === session?.user.id
         );
-        const isFollow = following ? true : false;
+        const isFollow = !!following;
         // @ts-nocheck
         const {
           _id,
