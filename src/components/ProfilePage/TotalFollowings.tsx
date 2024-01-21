@@ -1,9 +1,12 @@
 'use client';
 
-import { useProfile } from './ProfileContext';
+import { TProfileData } from '@/app/api/user/getProfileData';
 
-export default function TotalFollowings() {
-  const { user } = useProfile();
+type Props = {
+  user: TProfileData;
+};
+
+export default function TotalFollowings({ user }: Props) {
   return (
     <div className="flex items-center flex-col md:flex-row md:gap-2">
       <h1 className="font-bold">{user?.totalFollowings}</h1>

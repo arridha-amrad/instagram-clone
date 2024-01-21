@@ -2,7 +2,6 @@ import { fetchProfile } from '@/actions/server/user';
 import { TProfileData } from '@/app/api/user/getProfileData';
 import FollowButton from '@/components/ProfilePage/FollowButton';
 import MessageButton from '@/components/ProfilePage/MessageBtn';
-import { ProfilePageProvider } from '@/components/ProfilePage/ProfileContext';
 import ProfileEditButton from '@/components/ProfilePage/ProfileEditBtn';
 import ProfileSettingsButton from '@/components/ProfilePage/ProfileSettingsBtn';
 import ProfileTab from '@/components/ProfilePage/ProfileTab';
@@ -34,11 +33,9 @@ export default async function ProfileLayout({
   return (
     <main className="w-full max-w-5xl mx-auto sm:mt-4 sm:pl-10">
       {user ? (
-        <ProfilePageProvider data={user}>
-          <Content user={user} username={username}>
-            {children}
-          </Content>
-        </ProfilePageProvider>
+        <Content user={user} username={username}>
+          {children}
+        </Content>
       ) : (
         <NoContent />
       )}
@@ -97,7 +94,7 @@ const ProfileInfo = async ({ user }: { user: TProfileData }) => {
               </>
             ) : (
               <>
-                <FollowButton />
+                <FollowButton user={user} />
                 <Spacer x={2} />
                 <MessageButton />
                 <Spacer x={2} />
@@ -109,31 +106,23 @@ const ProfileInfo = async ({ user }: { user: TProfileData }) => {
           </div>
           <div className="flex w-full justify-evenly md:justify-start md:gap-10">
             <TotalPosts />
-            <TotalFollowers />
-            <TotalFollowings />
+            <TotalFollowers user={user} />
+            <TotalFollowings user={user} />
           </div>
           <div className="md:block hidden">
-            <Description
-              name={user?.name}
-              bio={user?.bio}
-              occupation={user?.occupation}
-              threadUsername={user?.threadUsername}
-              web={user?.web}
-            />
+            <Description user={user} />
           </div>
         </div>
       </div>
       <div className="md:hidden block">
-        <Description
-          name={user?.name}
-          bio={user?.bio}
-          occupation={user?.occupation}
-          threadUsername={user?.threadUsername}
-          web={user?.web}
-        />
+        <Description user={user} />
       </div>
       <div className="md:hidden flex items-center justify-start gap-4 mt-4">
-        {isMe ? <ProfileEditButton user={user} /> : <FollowButton />}
+        {isMe ? (
+          <ProfileEditButton user={user} />
+        ) : (
+          <FollowButton user={user} />
+        )}
         {isMe ? <ProfileViewArchiveButton /> : <MessageButton />}
         {isMe ? <ProfileSettingsButton /> : <SuggestUserButton />}
       </div>
@@ -142,15 +131,11 @@ const ProfileInfo = async ({ user }: { user: TProfileData }) => {
 };
 
 type TDescription = {
-  name: string;
-  occupation?: string;
-  threadUsername?: string;
-  bio?: string;
-  web?: string;
+  user: TProfileData;
 };
 
-const Description = (props: TDescription) => {
-  const { name, bio, occupation, threadUsername, web } = props;
+const Description = ({ user }: TDescription) => {
+  const { name, bio, occupation, threadUsername, web } = user;
   return (
     <>
       <h1 className="md:font-bold">{name}</h1>
