@@ -1,13 +1,14 @@
-import { SidebarSearchProvider } from './Context';
 import SearchButton from './SearchButton';
-import { fetchSearchCache } from './actions';
+import SearchDialog from './SearchDialog';
+import SearchHistory from './SearchHistory';
 
 const SidebarSearch = async () => {
-  const users = await fetchSearchCache();
   return (
-    <SidebarSearchProvider savedSearchFromApi={users}>
-      <SearchButton />
-    </SidebarSearchProvider>
+    <SearchButton>
+      <SearchDialog>
+        <SearchHistory />
+      </SearchDialog>
+    </SearchButton>
   );
 };
 

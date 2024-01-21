@@ -51,7 +51,7 @@ export default function PostCard() {
           width={1000}
           height={1000}
           priority
-          src="https://images.pexels.com/photos/722036/pexels-photo-722036.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          src="https://images.pexels.com/photos/160846/french-bulldog-summer-smile-joy-160846.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           alt="post"
         />
       </div>

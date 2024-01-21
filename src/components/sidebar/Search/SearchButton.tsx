@@ -4,9 +4,13 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/react';
 import { useSidebarContext } from '../SidebarContext';
 import { createPortal } from 'react-dom';
-import SearchDialog from './SearchDialog';
+import { ReactNode } from 'react';
 
-export default function SearchButton() {
+type Props = {
+  children: ReactNode;
+};
+
+export default function SearchButton({ children }: Props) {
   const {
     isDenseSidebar,
     attributes,
@@ -54,7 +58,7 @@ export default function SearchButton() {
               className="h-screen relative rounded-xl rounded-br bg-background w-[350px]"
             >
               <div className="absolute -z-10 inset-y-0 left-20 right-0 bg-default blur-xl" />
-              <SearchDialog />
+              {children}
             </div>
           </div>,
           document.body

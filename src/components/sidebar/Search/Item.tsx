@@ -1,11 +1,13 @@
 'use client';
 
+import { XMarkIcon } from '@heroicons/react/24/solid';
 import { Button, User } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-import { TSearchResult, useSidebarSearchContext } from './Context';
-import { useSession } from 'next-auth/react';
-import { XMarkIcon } from '@heroicons/react/24/solid';
-import { postSearchedUser, removeHistory } from './clientAction';
+import { TSearchResult } from './SearchHistory';
+import {
+  addToSearchHistory,
+  deleteSearchHistories
+} from '@/actions/server/user';
 
 type Props = {
   item: TSearchResult;
@@ -15,24 +17,16 @@ type Props = {
 const Item = ({ item, isRemoveAble }: Props) => {
   const { _id, name, username, avatar } = item;
   const defaultAvatar = `${process.env.NEXT_PUBLIC_URL}/default_profile.jpg`;
-  const { data } = useSession();
   const router = useRouter();
-  const { add, remove } = useSidebarSearchContext();
 
-  const navigateAndSave = async (username: string, id: string) => {
-    await postSearchedUser(id, data?.user.id);
+  const navigateAndSave = async () => {
+    await addToSearchHistory(_id);
     router.push(`/${username}`);
-    add(item);
-  };
-
-  const deleteSearch = async () => {
-    await removeHistory(_id, data?.user.id);
-    remove(item);
   };
 
   return (
     <div
-      onClick={async () => await navigateAndSave(username, _id)}
+      onClick={navigateAndSave}
       key={username}
       className="px-4 w-full hover:dark:bg-slate-900 cursor-pointer flex justify-between py-2  rounded-none h-max"
     >
@@ -45,9 +39,9 @@ const Item = ({ item, isRemoveAble }: Props) => {
         <Button
           size="sm"
           variant="light"
-          onClick={(e) => {
+          onClick={async (e) => {
             e.stopPropagation();
-            deleteSearch();
+            await deleteSearchHistories(_id);
           }}
           isIconOnly
           startContent={<XMarkIcon className="w-5 h-5" />}

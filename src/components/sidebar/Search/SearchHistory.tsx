@@ -1,38 +1,27 @@
-'use client';
-
-import { Button } from '@nextui-org/react';
-import { useSidebarSearchContext } from './Context';
-import { useSession } from 'next-auth/react';
-import { deleteAllSearchHistory } from './clientAction';
 import Item from './Item';
+import ClearAllButton from './ClearAllBtn';
 
-export default function SearchHistory() {
-  const { savedSearch, removeAll } = useSidebarSearchContext();
-  const { data } = useSession();
+import { getSearchHistories } from '@/actions/server/user';
 
-  const removeHistory = async () => {
-    if (data?.user.id) {
-      removeAll();
-      await deleteAllSearchHistory(data.user.id);
-    }
-  };
+export type TSearchResult = {
+  _id: string;
+  username: string;
+  name: string;
+  avatar?: string;
+};
+
+export default async function SearchHistory() {
+  const histories = (await getSearchHistories()) as TSearchResult[];
   return (
     <>
       <div className="flex justify-between items-center px-4 py-2">
         <div>
           <h1 className="font-bold">Latest</h1>
         </div>
-        <Button
-          onClick={removeHistory}
-          variant="light"
-          color="primary"
-          className="font-bold"
-        >
-          Clear all
-        </Button>
+        <ClearAllButton />
       </div>
       <div className="space-y-2 h-full">
-        {savedSearch.map((data) => (
+        {histories.map((data) => (
           <Item isRemoveAble item={data} key={data._id} />
         ))}
       </div>

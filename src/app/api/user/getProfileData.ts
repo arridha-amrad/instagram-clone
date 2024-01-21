@@ -16,9 +16,11 @@ export type TProfileData = {
   web?: string;
 };
 
-export default async function getProfileData(username: string) {
+export default async function getProfileData(
+  username: string,
+  authId?: string
+) {
   try {
-    const session = await getServerSideSession();
     await dbConnect();
     const user = await User.findOne({ username })
       .lean({ virtuals: true })
@@ -26,7 +28,7 @@ export default async function getProfileData(username: string) {
       .then((data) => {
         if (!data) return null;
         const following = data.followers?.find(
-          (followers) => followers.toString() === session?.user.id
+          (followers) => followers.toString() === authId
         );
         const isFollow = !!following;
         // @ts-nocheck

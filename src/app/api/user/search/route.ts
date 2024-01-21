@@ -13,16 +13,6 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
-  try {
-    const users = await getSearchedUsers();
-    return Response.json({ users }, { status: 200 });
-  } catch (err) {
-    console.log(err);
-    return Response.json({ message: 'Server Error' }, { status: 500 });
-  }
-}
-
 export async function DELETE(req: Request) {
   try {
     const { id, authId } = await req.json();

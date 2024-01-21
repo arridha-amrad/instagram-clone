@@ -1,3 +1,4 @@
+import { fetchProfile } from '@/actions/server/user';
 import { TProfileData } from '@/app/api/user/getProfileData';
 import FollowButton from '@/components/ProfilePage/FollowButton';
 import MessageButton from '@/components/ProfilePage/MessageBtn';
@@ -15,7 +16,6 @@ import UpdateableAvatar from '@/components/avatar/UpdatableAvatar';
 import ProfileOtherMenuButton from '@/components/button/ProfileOtherMenuButton';
 import getServerSideSession from '@/utils/getServerSideSession';
 import { Avatar, Button, Link, Spacer } from '@nextui-org/react';
-import { headers } from 'next/headers';
 import { ReactNode } from 'react';
 import { FaLink, FaThreads } from 'react-icons/fa6';
 
@@ -30,20 +30,7 @@ export default async function ProfileLayout({
   children,
   params: { username }
 }: Props) {
-  const session = await getServerSideSession();
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/user?username=${username}&authId=${session?.user.id}`,
-    {
-      headers: headers()
-    }
-  );
-  await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/${username}`).then(
-    (data) =>
-      data.json().then((data) => {
-        // console.log('resp data : ', data);
-      })
-  );
-  const { user } = (await response.json()) as { user: TProfileData | null };
+  const user = (await fetchProfile(username)) as TProfileData | null;
   return (
     <main className="w-full max-w-5xl mx-auto sm:mt-4 sm:pl-10">
       {user ? (

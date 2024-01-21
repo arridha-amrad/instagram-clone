@@ -12,10 +12,10 @@ export default async function addSearchedUsers(id: string, authId?: string) {
     console.log('user un authenticated');
     return;
   }
-  const idx = user.searchedUsers.findIndex((sid) => sid.toString() === id);
-  if (idx >= 0) {
-    user.searchedUsers.splice(idx, 1);
-  }
-  user.searchedUsers.unshift(objId);
-  await user.save();
+  // const idx = user.searchedUsers.findIndex((sid) => sid.toString() === id);
+  // if (idx >= 0) {
+  //   user.searchedUsers.splice(idx, 1);
+  // }
+  // user.searchedUsers.unshift(objId);
+  // await user.save();
 }

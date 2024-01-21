@@ -2,17 +2,22 @@
 
 import { Input, Spacer, Divider, Button } from '@nextui-org/react';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import Item from './Item';
 import { TSearchResult } from './Context';
-import { searchUser } from './clientAction';
-import SearchHistory from './SearchHistory';
+import { useSession } from 'next-auth/react';
+import { searchUser } from '@/actions/server/user';
 
-const SearchDialog = () => {
+type Props = {
+  children: ReactNode;
+};
+
+const SearchDialog = ({ children }: Props) => {
   const [search, setSearch] = useState('');
   const [key, setKey] = useState('');
   const [result, setResult] = useState<TSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { data } = useSession();
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -80,7 +85,7 @@ const SearchDialog = () => {
       <Spacer y={4} />
       <Divider />
       {!key ? (
-        <SearchHistory />
+        data && children
       ) : (
         <div className="space-y-2 h-full">
           {result.length === 0

@@ -1,7 +1,17 @@
+import { NextRequest } from 'next/server';
+import getProfileData from '../getProfileData';
+
 export async function GET(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { username: string } }
 ) {
   const username = params.username;
-  return Response.json({ username }, { status: 200 });
+  const authId = req.nextUrl.searchParams.get('authId') ?? undefined;
+  try {
+    const user = await getProfileData(username, authId);
+    return Response.json({ user }, { status: 200 });
+  } catch (err) {
+    console.log(err);
+    return Response.json({ message: 'Server Error' }, { status: 500 });
+  }
 }
