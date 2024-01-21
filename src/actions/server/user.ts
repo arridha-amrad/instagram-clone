@@ -68,3 +68,12 @@ export const followUser = async (userId: string, username: string) => {
   });
   revalidateTag(`profile-${username}`);
 };
+
+export const uploadAvatar = async (formData: FormData) => {
+  const session = await getServerSideSession();
+  if (!session) return;
+  const newForm = formData;
+  newForm.append('authId', session.user.id);
+  await fetch(`${baseURL}/api/user/avatar`, { method: 'POST', body: newForm });
+  revalidateTag(`profile-${session.user.username}`);
+};
