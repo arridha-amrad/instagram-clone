@@ -31,6 +31,8 @@ export default function CreateBtn() {
   const [previewIndex, setPreviewIndex] = useState(0);
   const [fileList, setFileList] = useState<File[]>([]);
 
+  const [loading, setLoading] = useState(false);
+
   const ref = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -122,7 +124,7 @@ export default function CreateBtn() {
                       variant="light"
                       color="primary"
                     >
-                      Post
+                      {loading ? 'loading...' : 'Post'}
                     </Button>
                   </div>
                 )}
@@ -183,7 +185,13 @@ export default function CreateBtn() {
                         for (let i = 0; i < fileList.length; i++) {
                           newForm.append('image', fileList[i]);
                         }
-                        await createPost(newForm);
+                        try {
+                          setLoading(true);
+                          await createPost(newForm);
+                        } catch (error) {
+                        } finally {
+                          setLoading(false);
+                        }
                       }}
                       className="w-full flex flex-col items-start gap-4 pl-4 py-2 max-w-xs h-full"
                     >

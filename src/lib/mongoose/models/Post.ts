@@ -1,16 +1,21 @@
 import mongoose, { Model } from 'mongoose';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 
+export type TImage = {
+  url: string;
+  publicId: string;
+};
+
 export type TPost = {
   id: string;
   description: string;
   location: string;
-  createdAt: Date;
-  updatedAt: Date;
-  images: string[];
+  images: TImage[];
   likes: mongoose.Types.ObjectId[];
   comments: mongoose.Types.ObjectId[];
   user: mongoose.Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type TPostVirtual = {
@@ -23,6 +28,14 @@ export type TPostMethods = {
 };
 
 type TPostModel = Model<TPost, {}, TPostMethods, TPostVirtual>;
+
+const imageSchema = new mongoose.Schema<TImage>(
+  {
+    publicId: String,
+    url: String
+  },
+  { _id: false }
+);
 
 const schema = new mongoose.Schema<
   TPost,
@@ -37,12 +50,7 @@ const schema = new mongoose.Schema<
       ref: 'User',
       type: mongoose.Schema.Types.ObjectId
     },
-    images: [
-      {
-        type: String,
-        required: true
-      }
-    ],
+    images: [imageSchema],
     likes: [
       {
         ref: 'User',

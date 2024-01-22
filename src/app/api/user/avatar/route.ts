@@ -15,7 +15,8 @@ export async function POST(req: NextRequest) {
     if (authUser.avatar && authUser.avatarPublicId) {
       await remove(authUser.avatarPublicId);
     }
-    const user = await User.findByIdAndUpdate(authId, {
+
+    await User.findByIdAndUpdate(authId, {
       avatar: secure_url,
       avatarPublicId: public_id
     }).lean();
