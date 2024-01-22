@@ -15,11 +15,12 @@ export async function POST(req: NextRequest) {
     if (authUser.avatar && authUser.avatarPublicId) {
       await remove(authUser.avatarPublicId);
     }
-    await User.findByIdAndUpdate(authId, {
+    const user = await User.findByIdAndUpdate(authId, {
       avatar: secure_url,
       avatarPublicId: public_id
-    });
-    return NextResponse.json({ message: 'uploaded' }, { status: 201 });
+    }).lean();
+
+    return NextResponse.json({ avatar: secure_url }, { status: 201 });
   } catch (err) {
     console.log(err);
     return NextResponse.json({ message: 'Server Error' }, { status: 500 });

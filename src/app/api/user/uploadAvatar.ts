@@ -15,9 +15,7 @@ export default async function uploadAvatar({ authUserId, file }: Args) {
       throw new Error('User not found');
     }
     const response = await upload(file);
-    console.log({ response });
     if (authUser.avatar && authUser.avatarPublicId) {
-      console.log('remove...');
       await remove(authUser.avatarPublicId);
     }
     authUser.avatar = response.secure_url;

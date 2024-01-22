@@ -1,34 +1,80 @@
 'use client';
 
-import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  MapPinIcon,
+  PlusCircleIcon
+} from '@heroicons/react/24/outline';
 import {
   Button,
+  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalHeader,
+  User,
   useDisclosure
 } from '@nextui-org/react';
 import { useSidebarContext } from './SidebarContext';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { baseURL } from '@/actions/variables';
+import { createPost } from '@/actions/server/post';
 
 export default function CreateBtn() {
   const { isDenseSidebar } = useSidebarContext();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { data } = useSession();
   const [preview, setPreview] = useState<string[]>([]);
+  const [previewIndex, setPreviewIndex] = useState(0);
+  const [fileList, setFileList] = useState<FileList | null>(null);
+
+  const ref = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setPreview([]);
+    }
+  }, [isOpen]);
 
   const onChangeFileInput = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!data?.user.id) return;
     if (files && files.length > 0) {
-      setUrl(URL.createObjectURL(files[0]));
-      const formData = new FormData();
-      formData.append('image', files[0]);
-      await uploadAvatar(formData);
+      for (let i = 0; i < files.length; i++) {
+        const url = URL.createObjectURL(files[i]);
+        console.log(url);
+        setPreview((val) => [...val, url]);
+      }
+      setFileList(files);
     }
   };
+
+  const nextPreview = () => {
+    setPreviewIndex((val) => {
+      if (val === preview.length - 1) {
+        return 0;
+      }
+      return (val += 1);
+    });
+  };
+
+  const prevPreview = () => {
+    setPreviewIndex((val) => {
+      if (val === 0) {
+        return preview.length - 1;
+      }
+      return (val -= 1);
+    });
+  };
+
+  const defaultAvatar = data?.user.avatar ?? `${baseURL}/default_profile.jpg`;
+
+  const btnSubmitRef = useRef<HTMLButtonElement | null>(null);
+
+  const submitPost = createPost.bind(null, fileList);
 
   return (
     <>
@@ -48,30 +94,126 @@ export default function CreateBtn() {
           <span className={'font-normal xl:block hidden pl-3'}>Create</span>
         )}
       </Button>
-      <input type="file" hidden multiple onChange={onChangeFileInput} />
+      <input
+        ref={ref}
+        type="file"
+        hidden
+        multiple
+        onChange={onChangeFileInput}
+      />
       <Modal
         hideCloseButton
-        size="lg"
+        size={preview.length > 0 ? '4xl' : 'lg'}
         backdrop="blur"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       >
-        <ModalContent className="h-[80vh]">
+        <ModalContent className="h-[80vh] p-0">
           {(onClose) => (
             <>
-              <ModalHeader className="flex border-b border-skin-base flex-col gap-1 items-center justify-center">
-                Crate New Post
+              <ModalHeader className="flex border-b border-skin-base gap-1 items-center justify-center">
+                {preview.length > 0 && <div className="flex-1" />}
+                <div className="flex-1 flex justify-center">Create Post</div>
+                {preview.length > 0 && (
+                  <div className="flex-1 flex justify-end">
+                    <Button
+                      onClick={() => btnSubmitRef.current?.click()}
+                      className="font-semibold"
+                      variant="light"
+                      color="primary"
+                    >
+                      Post
+                    </Button>
+                  </div>
+                )}
               </ModalHeader>
-              <ModalBody className="px-4 flex items-center justify-center">
-                <div className="flex items-center justify-center flex-col gap-4">
-                  <Icon />
-                  <h1 className="font-medium text-lg">
-                    Drag and drop your files here
-                  </h1>
-                  <Button className="font-semibold px-6" color="primary">
-                    Pick files
-                  </Button>
-                </div>
+              <ModalBody className="flex items-center justify-center">
+                {preview.length > 0 ? (
+                  <div className="flex gap-2 w-full h-full">
+                    <div className="relative max-w-lg w-full h-full rounded-lg">
+                      {preview.length > 1 && (
+                        <Button
+                          onClick={prevPreview}
+                          variant="flat"
+                          className={`absolute top-1/2 left-3 z-50`}
+                          isIconOnly
+                          startContent={<ChevronLeftIcon className="w-5 h-5" />}
+                        />
+                      )}
+                      <Image
+                        alt="preview"
+                        src={preview[previewIndex]}
+                        fill
+                        className="object-cover"
+                      />
+                      {preview.length > 1 && (
+                        <Button
+                          onClick={nextPreview}
+                          variant="flat"
+                          className={`absolute top-1/2 right-3 z-50 `}
+                          isIconOnly
+                          startContent={
+                            <ChevronRightIcon className="w-5 h-5" />
+                          }
+                        />
+                      )}
+                      {preview.length > 1 && (
+                        <div
+                          className={`absolute flex rounded-full gap-1 items-center bottom-3 left-1/2 -translate-x-1/2`}
+                        >
+                          {Array(preview.length)
+                            .fill('')
+                            .map((_, i) => (
+                              <div
+                                key={i}
+                                onClick={() => setPreviewIndex(i)}
+                                className={`w-2 h-2 shadow rounded-full cursor-pointer ${
+                                  i === previewIndex
+                                    ? 'bg-blue-500'
+                                    : 'bg-slate-300'
+                                }`}
+                              />
+                            ))}
+                        </div>
+                      )}
+                    </div>
+                    <form
+                      action={submitPost}
+                      className="w-full flex flex-col items-start gap-4 pl-4 py-2 max-w-xs h-full"
+                    >
+                      <User
+                        name={data?.user.username}
+                        avatarProps={{ src: defaultAvatar }}
+                      />
+                      <textarea
+                        name="description"
+                        className="h-full bg-transparent outline-none w-full rounded-lg resize-none"
+                        placeholder="Enter your description"
+                      />
+                      <Input
+                        name="location"
+                        variant="faded"
+                        endContent={<MapPinIcon className="w-6 h-6" />}
+                        placeholder="Add Location"
+                      />
+                      <button hidden type="submit" ref={btnSubmitRef} />
+                    </form>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center flex-col gap-4">
+                    <Icon />
+                    <h1 className="font-medium text-lg">
+                      Drag and drop your files here
+                    </h1>
+                    <Button
+                      onClick={() => ref.current?.click()}
+                      className="font-semibold px-6"
+                      color="primary"
+                    >
+                      Pick files
+                    </Button>
+                  </div>
+                )}
               </ModalBody>
             </>
           )}

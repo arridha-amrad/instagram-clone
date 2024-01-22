@@ -9,9 +9,9 @@ type Props = {
   src: string;
 };
 
-export default function UpdateableAvatar({ src }: Props) {
+export default function UpdateAbleAvatar({ src }: Props) {
   const ref = useRef<HTMLInputElement | null>(null);
-  const { data } = useSession();
+  const { data, update } = useSession();
   const authId = data?.user.id;
   const [url, setUrl] = useState(src);
   const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +21,8 @@ export default function UpdateableAvatar({ src }: Props) {
       setUrl(URL.createObjectURL(files[0]));
       const formData = new FormData();
       formData.append('image', files[0]);
-      await uploadAvatar(formData);
+      const data = await uploadAvatar(formData);
+      await update({ avatar: data.avatar });
     }
   };
   return (

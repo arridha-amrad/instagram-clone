@@ -11,13 +11,16 @@ export const upload = async (file: File) => {
   const buffer = new Uint8Array(arraBuffer);
   const data = await new Promise((resolve, reject) => {
     cloudinary.uploader
-      .upload_stream({ folder: 'nextgram', transformation: { quality: 85 } }, (err, result) => {
-        if (err) {
-          reject(err);
-          return;
+      .upload_stream(
+        { folder: 'nextgram', transformation: { quality: 85 } },
+        (err, result) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve(result);
         }
-        resolve(result);
-      })
+      )
       .end(buffer);
   });
   return data as UploadApiResponse;

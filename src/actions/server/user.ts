@@ -74,6 +74,11 @@ export const uploadAvatar = async (formData: FormData) => {
   if (!session) return;
   const newForm = formData;
   newForm.append('authId', session.user.id);
-  await fetch(`${baseURL}/api/user/avatar`, { method: 'POST', body: newForm });
+  const response = await fetch(`${baseURL}/api/user/avatar`, {
+    method: 'POST',
+    body: newForm
+  });
   revalidateTag(`profile-${session.user.username}`);
+  const data = await response.json();
+  return data;
 };
