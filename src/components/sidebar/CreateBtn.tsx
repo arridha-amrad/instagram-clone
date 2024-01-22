@@ -29,7 +29,7 @@ export default function CreateBtn() {
   const { data } = useSession();
   const [preview, setPreview] = useState<string[]>([]);
   const [previewIndex, setPreviewIndex] = useState(0);
-  const [fileList, setFileList] = useState<FileList | null>(null);
+  const [fileList, setFileList] = useState<File[]>([]);
 
   const ref = useRef<HTMLInputElement | null>(null);
 
@@ -44,11 +44,11 @@ export default function CreateBtn() {
     if (!data?.user.id) return;
     if (files && files.length > 0) {
       for (let i = 0; i < files.length; i++) {
+        setFileList((val) => [...val, files[i]]);
         const url = URL.createObjectURL(files[i]);
         console.log(url);
         setPreview((val) => [...val, url]);
       }
-      setFileList(files);
     }
   };
 
@@ -74,7 +74,7 @@ export default function CreateBtn() {
 
   const btnSubmitRef = useRef<HTMLButtonElement | null>(null);
 
-  const submitPost = createPost.bind(null, fileList);
+  const formfile = useRef<HTMLInputElement | null>(null);
 
   return (
     <>
@@ -178,7 +178,13 @@ export default function CreateBtn() {
                       )}
                     </div>
                     <form
-                      action={submitPost}
+                      action={async (formData: FormData) => {
+                        const newForm = formData;
+                        for (let i = 0; i < fileList.length; i++) {
+                          newForm.append('image', fileList[i]);
+                        }
+                        await createPost(newForm);
+                      }}
                       className="w-full flex flex-col items-start gap-4 pl-4 py-2 max-w-xs h-full"
                     >
                       <User

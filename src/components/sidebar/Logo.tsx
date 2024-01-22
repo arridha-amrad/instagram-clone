@@ -10,7 +10,6 @@ export default function Logo() {
   useEffect(() => {
     const setWidth = () => {
       setSize(window.innerWidth);
-      console.log('width : ', window.innerWidth);
     };
     window.addEventListener('resize', setWidth);
     return () => {
