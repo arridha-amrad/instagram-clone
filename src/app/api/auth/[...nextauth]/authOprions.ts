@@ -1,5 +1,7 @@
 import { NextAuthOptions } from 'next-auth';
 import { config } from '../auth';
+import dbConnect from '@/lib/mongoose/init';
+import User from '@/lib/mongoose/models/User';
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -7,7 +9,8 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user, trigger, session }) {
-      if (trigger === 'update' && session?.avatar) {
+      if (trigger === 'update') {
+        console.log('update');
         token.avatar = session.avatar;
       }
       if (user) {

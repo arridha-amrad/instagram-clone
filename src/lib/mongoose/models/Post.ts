@@ -23,11 +23,7 @@ export type TPostVirtual = {
   totalComments: number;
 };
 
-export type TPostMethods = {
-  checkIsLiked: (authId: string) => boolean;
-};
-
-type TPostModel = Model<TPost, {}, TPostMethods, TPostVirtual>;
+type TPostModel = Model<TPost, {}, {}, TPostVirtual>;
 
 const imageSchema = new mongoose.Schema<TImage>(
   {
@@ -37,12 +33,7 @@ const imageSchema = new mongoose.Schema<TImage>(
   { _id: false }
 );
 
-const schema = new mongoose.Schema<
-  TPost,
-  TPostModel,
-  TPostMethods,
-  TPostVirtual
->(
+const schema = new mongoose.Schema<TPost, TPostModel, TPostVirtual>(
   {
     description: String,
     location: String,
@@ -64,7 +55,9 @@ const schema = new mongoose.Schema<
       }
     ]
   },
-  { timestamps: true }
+  {
+    timestamps: true
+  }
 );
 
 schema.plugin(mongooseLeanVirtuals);

@@ -13,6 +13,7 @@ import TopBar from '@/components/top-bar/TopBar';
 import getServerSideSession from '@/utils/getServerSideSession';
 import Image from 'next/image';
 import NextLink from 'next/link';
+import PostList from '@/components/HomePage/PostList';
 
 export default async function Page() {
   const session = await getServerSideSession();
@@ -101,10 +102,7 @@ const Home = () => {
         <div className="h-max max-w-xl w-full mx-auto xl:pb-6 ">
           <StoryBar />
         </div>
-        <div className="mx-auto z-50 h-max lg:max-w-lg md:max-w-md sm:max-w-sm w-full flex flex-col gap-10 xl:pb-20 pb-10">
-          <PostCard />
-          <PostCard />
-        </div>
+        <PostList />
       </div>
       <div className="flex-1 sticky h-screen top-0 max-w-[300px] lg:block hidden">
         <div className="h-[90px] w-full sticky top-0 flex items-center">

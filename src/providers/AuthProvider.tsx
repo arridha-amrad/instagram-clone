@@ -6,16 +6,16 @@ import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useEffect } from 'react';
 
 type Props = {
-   children: ReactNode;
+  children: ReactNode;
 };
 
 export default function AuthProvider({ children }: Props) {
-   const pathname = usePathname();
-   const router = useRouter();
+  const pathname = usePathname();
+  const router = useRouter();
 
-   useEffect(() => {
-      NProgress.done();
-   }, [pathname, router]);
+  useEffect(() => {
+    NProgress.done();
+  }, [pathname, router]);
 
-   return <SessionProvider>{children}</SessionProvider>;
+  return <SessionProvider>{children}</SessionProvider>;
 }

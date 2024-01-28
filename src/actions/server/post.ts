@@ -2,8 +2,10 @@
 
 import getServerSideSession from '@/utils/getServerSideSession';
 import { baseURL } from '../variables';
-import { revalidateTag } from 'next/cache';
+import { revalidateTag, unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
+import Post from '@/lib/mongoose/models/Post';
+import dbConnect from '@/lib/mongoose/init';
 
 export const createPost = async (formData: FormData) => {
   const session = await getServerSideSession();
@@ -31,17 +33,31 @@ export const getPostById = async (postId: string) => {
   return data.post;
 };
 
-export const getHomePosts = async () => {
-  const session = await getServerSideSession();
-  const response = await fetch(
-    `${baseURL}/api/post?authId=${session?.user.id}`,
-    {
-      next: { tags: [`home-posts`] }
-    }
-  );
-  const data = await response.json();
-  return data.posts;
-};
+export const getHomePosts = unstable_cache(
+  async () => {
+    const session = await getServerSideSession();
+    const authId = session?.user.id;
+    await dbConnect();
+    const posts = await Post.find()
+      .populate({ path: 'user', select: 'username _id avatar' })
+      .populate({ path: 'comments' })
+      .lean({ virtuals: true })
+      .exec()
+      .then((data) => {
+        return data.map((post) => {
+          const isLiked = authId
+            ? !!post.likes.find((user) => user._id.toString() === authId)
+            : false;
+          return { ...post, isLiked };
+        });
+      });
+    return posts;
+  },
+  ['home-posts'],
+  {
+    tags: ['home-posts']
+  }
+);
 
 export const deletePost = async (postId: string) => {
   const session = await getServerSideSession();

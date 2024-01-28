@@ -1,5 +1,7 @@
 import mongoose, { Model } from 'mongoose';
 import { mongooseLeanVirtuals } from 'mongoose-lean-virtuals';
+import User from './User';
+import Post from './Post';
 
 export type TComment = {
   id: string;
