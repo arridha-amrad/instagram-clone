@@ -1,7 +1,5 @@
 import { NextAuthOptions } from 'next-auth';
 import { config } from '../auth';
-import dbConnect from '@/lib/mongoose/init';
-import User from '@/lib/mongoose/models/User';
 
 export const authOptions: NextAuthOptions = {
   pages: {

@@ -1,34 +1,25 @@
 'use client';
 
-import Image from 'next/image';
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  MapPinIcon,
-  PlusCircleIcon
-} from '@heroicons/react/24/outline';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import {
   Button,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalHeader,
-  User,
   useDisclosure
 } from '@nextui-org/react';
 import { useSidebarContext } from './SidebarContext';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { baseURL } from '@/actions/variables';
-import { createPost } from '@/actions/server/post';
+import Carousel from '../carousel';
+import PostForm from '../form/PostForm';
 
 export default function CreateBtn() {
   const { isDenseSidebar } = useSidebarContext();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { data } = useSession();
   const [preview, setPreview] = useState<string[]>([]);
-  const [previewIndex, setPreviewIndex] = useState(0);
   const [fileList, setFileList] = useState<File[]>([]);
 
   const [loading, setLoading] = useState(false);
@@ -54,29 +45,7 @@ export default function CreateBtn() {
     }
   };
 
-  const nextPreview = () => {
-    setPreviewIndex((val) => {
-      if (val === preview.length - 1) {
-        return 0;
-      }
-      return (val += 1);
-    });
-  };
-
-  const prevPreview = () => {
-    setPreviewIndex((val) => {
-      if (val === 0) {
-        return preview.length - 1;
-      }
-      return (val -= 1);
-    });
-  };
-
-  const defaultAvatar = data?.user.avatar ?? `${baseURL}/default_profile.jpg`;
-
   const btnSubmitRef = useRef<HTMLButtonElement | null>(null);
-
-  const formfile = useRef<HTMLInputElement | null>(null);
 
   return (
     <>
@@ -119,12 +88,13 @@ export default function CreateBtn() {
                 {preview.length > 0 && (
                   <div className="flex-1 flex justify-end">
                     <Button
+                      isLoading={loading}
                       onClick={() => btnSubmitRef.current?.click()}
                       className="font-semibold"
                       variant="light"
                       color="primary"
                     >
-                      {loading ? 'loading...' : 'Post'}
+                      Post
                     </Button>
                   </div>
                 )}
@@ -132,86 +102,13 @@ export default function CreateBtn() {
               <ModalBody className="flex items-center justify-center">
                 {preview.length > 0 ? (
                   <div className="flex gap-2 w-full h-full">
-                    <div className="relative max-w-lg w-full h-full rounded-lg">
-                      {preview.length > 1 && (
-                        <Button
-                          onClick={prevPreview}
-                          variant="flat"
-                          className={`absolute top-1/2 left-3 z-50`}
-                          isIconOnly
-                          startContent={<ChevronLeftIcon className="w-5 h-5" />}
-                        />
-                      )}
-                      <Image
-                        alt="preview"
-                        src={preview[previewIndex]}
-                        fill
-                        className="object-cover"
-                      />
-                      {preview.length > 1 && (
-                        <Button
-                          onClick={nextPreview}
-                          variant="flat"
-                          className={`absolute top-1/2 right-3 z-50 `}
-                          isIconOnly
-                          startContent={
-                            <ChevronRightIcon className="w-5 h-5" />
-                          }
-                        />
-                      )}
-                      {preview.length > 1 && (
-                        <div
-                          className={`absolute flex rounded-full gap-1 items-center bottom-3 left-1/2 -translate-x-1/2`}
-                        >
-                          {Array(preview.length)
-                            .fill('')
-                            .map((_, i) => (
-                              <div
-                                key={i}
-                                onClick={() => setPreviewIndex(i)}
-                                className={`w-2 h-2 shadow rounded-full cursor-pointer ${
-                                  i === previewIndex
-                                    ? 'bg-blue-500'
-                                    : 'bg-slate-300'
-                                }`}
-                              />
-                            ))}
-                        </div>
-                      )}
-                    </div>
-                    <form
-                      action={async (formData: FormData) => {
-                        const newForm = formData;
-                        for (let i = 0; i < fileList.length; i++) {
-                          newForm.append('image', fileList[i]);
-                        }
-                        try {
-                          setLoading(true);
-                          await createPost(newForm);
-                        } catch (error) {
-                        } finally {
-                          setLoading(false);
-                        }
-                      }}
-                      className="w-full flex flex-col items-start gap-4 pl-4 py-2 max-w-xs h-full"
-                    >
-                      <User
-                        name={data?.user.username}
-                        avatarProps={{ src: defaultAvatar }}
-                      />
-                      <textarea
-                        name="description"
-                        className="h-full bg-transparent outline-none w-full rounded-lg resize-none"
-                        placeholder="Enter your description"
-                      />
-                      <Input
-                        name="location"
-                        variant="faded"
-                        endContent={<MapPinIcon className="w-6 h-6" />}
-                        placeholder="Add Location"
-                      />
-                      <button hidden type="submit" ref={btnSubmitRef} />
-                    </form>
+                    <Carousel urls={preview} />
+                    <PostForm
+                      onClose={onClose}
+                      loading={loading}
+                      fileList={fileList}
+                      setLoading={setLoading}
+                    />
                   </div>
                 ) : (
                   <div className="flex items-center justify-center flex-col gap-4">

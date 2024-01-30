@@ -2,8 +2,10 @@
 
 import getServerSideSession from '@/utils/getServerSideSession';
 import { baseURL } from '../variables';
-import { revalidateTag } from 'next/cache';
+import { revalidateTag, unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
+import dbConnect from '@/lib/mongoose/init';
+import User, { TUser } from '@/lib/mongoose/models/User';
 
 export const fetchProfile = async (username: string) => {
   const session = await getServerSideSession();
@@ -17,15 +19,29 @@ export const fetchProfile = async (username: string) => {
   return data.user;
 };
 
-export const getSearchHistories = async () => {
-  const session = await getServerSideSession();
-  const response = await fetch(
-    `${baseURL}/api/user/search/history?authId=${session?.user.id}`,
-    { next: { tags: ['search-history'] } }
-  );
-  const data = await response.json();
-  return data.users;
-};
+export const getSearchHistories = unstable_cache(
+  async () => {
+    const session = await getServerSideSession();
+    await dbConnect();
+    if (!session) return;
+    const users = await User.findById(session.user.id)
+      .populate({
+        path: 'searchedUsers',
+        select: 'username name avatar id'
+      })
+      .lean()
+      .exec()
+      .then((data) => {
+        if (!data) return [];
+        const users = data.searchedUsers as unknown;
+        return users as TUser[];
+      });
+    console.log({ users });
+    return users;
+  },
+  ['search-history'],
+  { tags: ['search-history'] }
+);
 
 export const deleteSearchHistories = async (id?: string) => {
   const session = await getServerSideSession();

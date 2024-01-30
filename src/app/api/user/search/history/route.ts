@@ -1,5 +1,5 @@
 import dbConnect from '@/lib/mongoose/init';
-import User from '@/lib/mongoose/models/User';
+import User, { TUser } from '@/lib/mongoose/models/User';
 import { NextRequest } from 'next/server';
 
 export async function DELETE(req: Request) {
@@ -31,7 +31,8 @@ export async function GET(req: NextRequest) {
       .then((data) => {
         if (!data) return [];
         const { searchedUsers } = data;
-        return searchedUsers;
+        const res = searchedUsers as unknown;
+        return res as TUser[];
       });
     return Response.json({ users }, { status: 200 });
   } catch (err) {

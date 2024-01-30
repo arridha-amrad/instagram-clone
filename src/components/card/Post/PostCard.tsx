@@ -1,16 +1,16 @@
 'use client';
 
-import { Button, Spacer } from '@nextui-org/react';
-import UserCardWithTime from '../UseCardWithTime';
+import { IPost } from '@/actions/server/post';
 import BookmarkIcon from '@heroicons/react/24/outline/BookmarkIcon';
 import CommentIcon from '@heroicons/react/24/outline/ChatBubbleLeftIcon';
 import SendIcon from '@heroicons/react/24/outline/PaperAirplaneIcon';
+import { Button, Spacer } from '@nextui-org/react';
 import { useCallback, useRef, useState } from 'react';
-import { IPost } from '@/actions/server/post';
+import PostCommentInput from '../../form/PostCommentForm';
+import UserCardWithTime from '../UseCardWithTime';
+import CommentItem from './CommentItem';
 import PostCarousel from './PostCarousel';
 import PostLikedButton from './PostLikedBtn';
-import PostCommentInput from './PostCommentForm';
-import CommentItem from './CommentItem';
 
 type Props = {
   post: IPost;

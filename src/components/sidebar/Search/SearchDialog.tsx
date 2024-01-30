@@ -4,9 +4,9 @@ import { Input, Spacer, Divider, Button } from '@nextui-org/react';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ReactNode, useEffect, useState } from 'react';
 import Item from './Item';
-import { TSearchResult } from './Context';
 import { useSession } from 'next-auth/react';
 import { searchUser } from '@/actions/server/user';
+import { TUser } from '@/lib/mongoose/models/User';
 
 type Props = {
   children: ReactNode;
@@ -15,7 +15,7 @@ type Props = {
 const SearchDialog = ({ children }: Props) => {
   const [search, setSearch] = useState('');
   const [key, setKey] = useState('');
-  const [result, setResult] = useState<TSearchResult[]>([]);
+  const [result, setResult] = useState<TUser[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { data } = useSession();
 
@@ -94,7 +94,7 @@ const SearchDialog = ({ children }: Props) => {
                   <p>No result</p>
                 </div>
               )
-            : result.map((data) => <Item item={data} key={data._id} />)}
+            : result.map((data) => <Item item={data} key={data.id} />)}
         </div>
       )}
     </>

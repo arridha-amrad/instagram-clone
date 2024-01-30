@@ -1,17 +1,19 @@
-import { IPost } from '@/actions/server/post';
-import ChevronLeftIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
-import ChevronRightIcon from '@heroicons/react/24/outline/ChevronRightIcon';
+'use client';
+
+import ChevronRightIcon from '@heroicons/react/24/solid/ChevronRightIcon';
 import { Button } from '@nextui-org/react';
-import Image from 'next/image';
 import { useState } from 'react';
+import Image from 'next/image';
+import ChevronLeftIcon from '@heroicons/react/24/solid/ChevronLeftIcon';
 
 type Props = {
-  post: IPost;
+  urls: string[];
 };
 
-const PostCarousel = ({ post }: Props) => {
-  const total = post.images.length;
+export default function Carousel({ urls }: Props) {
+  const total = urls.length;
   const [previewIndex, setPreviewIndex] = useState(0);
+
   const nextPreview = () => {
     setPreviewIndex((val) => {
       if (val === total - 1) {
@@ -30,29 +32,27 @@ const PostCarousel = ({ post }: Props) => {
     });
   };
   return (
-    <div className="w-full group h-full relative max-h-[900px] overflow-hidden border border-skin-base">
+    <div className="relative max-w-lg w-full h-full rounded-lg">
       {total > 1 && (
         <Button
           onClick={prevPreview}
           variant="flat"
-          className={`absolute group-hover:opacity-100 opacity-0 top-1/2 -translate-y-1/2 left-3`}
+          className={`absolute top-1/2 left-3 z-50`}
           isIconOnly
           startContent={<ChevronLeftIcon className="w-5 h-5" />}
         />
       )}
       <Image
-        className="object-cover w-full h-auto"
-        width={700}
-        height={1000}
-        priority
-        src={post.images[previewIndex].url}
-        alt="post"
+        alt="preview"
+        src={urls[previewIndex]}
+        fill
+        className="object-cover"
       />
       {total > 1 && (
         <Button
           onClick={nextPreview}
           variant="flat"
-          className={`absolute group-hover:opacity-100 opacity-0 top-1/2 -translate-y-1/2 right-3  `}
+          className={`absolute top-1/2 right-3 z-50 `}
           isIconOnly
           startContent={<ChevronRightIcon className="w-5 h-5" />}
         />
@@ -76,5 +76,4 @@ const PostCarousel = ({ post }: Props) => {
       )}
     </div>
   );
-};
-export default PostCarousel;
+}

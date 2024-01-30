@@ -101,7 +101,7 @@ const Home = () => {
         <div className="h-max max-w-xl w-full mx-auto xl:pb-6 ">
           <StoryBar />
         </div>
-        <Spacer y={10} />
+        <Spacer y={2} />
         <PostListContainer />
       </div>
       <div className="flex-1 sticky h-screen top-0 max-w-[300px] lg:block hidden">

@@ -3,6 +3,13 @@ import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 
 const providers = ['facebook', 'default'];
 
+export type TUser = {
+  id: string;
+  avatar: string;
+  name: string;
+  username: string;
+};
+
 export type IUser = {
   id: string;
   name: string;

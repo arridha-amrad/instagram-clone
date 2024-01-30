@@ -26,14 +26,14 @@ const Story = ({ url }: Props, ref: Ref<HTMLDivElement>) => {
       <div
         onClick={handleOpen}
         ref={ref}
-        className="bg-gradient-to-tr cursor-pointer flex-shrink-0 from-blue-500 to-red-500 via-indigo-300 rounded-full p-1"
+        className="bg-gradient-to-tr cursor-pointer flex-shrink-0 from-red-500 to-purple-500 via-yellow-500 rounded-full p-0.5"
       >
         <div className="bg-background p-1 rounded-full">
           <Image
-            width={60}
-            height={60}
+            width={40}
+            height={40}
             alt="story"
-            className="rounded-full w-12 sm:w-14 md:w-16 aspect-square"
+            className="rounded-full w-10 sm:w-12 aspect-square"
             src={url}
           />
         </div>
