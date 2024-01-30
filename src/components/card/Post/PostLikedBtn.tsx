@@ -1,10 +1,11 @@
 'use client';
 
 import { IPost } from '@/actions/server/post';
-import { usePosts } from '@/providers/PostProvider';
+import usePostsStore from '@/lib/zustand/store/postStore';
 import HeartIcon from '@heroicons/react/24/outline/HeartIcon';
 import HeartIconSolid from '@heroicons/react/24/solid/HeartIcon';
 import { Button } from '@nextui-org/react';
+import { likePost as like } from '@/actions/server/post';
 
 type Props = {
   post: IPost;
@@ -12,14 +13,10 @@ type Props = {
 
 const PostLikedButton = ({ post }: Props) => {
   const { isLiked, id } = post;
-  const { posts, setPosts } = usePosts();
+  const { likePost } = usePostsStore();
   const liked = async () => {
-    const mPosts = [...posts];
-    const mPost = mPosts.find((p) => p.id === id);
-    if (mPost) {
-      mPost.isLiked = !mPost.isLiked;
-    }
-    setPosts(mPosts);
+    likePost(id);
+    await like(id);
   };
   return (
     <Button onClick={liked} variant="light" isIconOnly>

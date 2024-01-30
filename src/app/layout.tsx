@@ -31,21 +31,19 @@ export default async function RootLayout({
       <body>
         <AuthProvider>
           <NextTopLoader showSpinner={false} color="#0095F6" />
-          <PostProvider>
-            <Providers>
-              {session ? (
-                <div className="flex w-full">
-                  <BottomBar />
-                  <div className="sticky h-screen inset-y-0 left-0">
-                    <Sidebar />
-                  </div>
-                  <div className="w-full">{children}</div>
+          <Providers>
+            {session ? (
+              <div className="flex w-full">
+                <BottomBar />
+                <div className="sticky h-screen inset-y-0 left-0">
+                  <Sidebar />
                 </div>
-              ) : (
-                children
-              )}
-            </Providers>
-          </PostProvider>
+                <div className="w-full">{children}</div>
+              </div>
+            ) : (
+              children
+            )}
+          </Providers>
         </AuthProvider>
       </body>
     </html>

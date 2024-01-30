@@ -1,21 +1,21 @@
 'use client';
 
-import { usePosts } from '@/providers/PostProvider';
 import { useEffect } from 'react';
 import PostCard from '../card/Post/PostCard';
 import { IPost } from '@/actions/server/post';
+import usePostsStore from '@/lib/zustand/store/postStore';
 
 type Props = {
   data: IPost[];
 };
 
 const PostList = ({ data }: Props) => {
-  const { posts, setPosts, setLoading, isLoading } = usePosts();
+  const { setPosts, posts, setLoading, isLoading } = usePostsStore();
 
   useEffect(() => {
     setPosts(data);
     setLoading(false);
-  }, []);
+  }, [data]);
 
   if (!!posts && isLoading) {
     return <p>loading...</p>;

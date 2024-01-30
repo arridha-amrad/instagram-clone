@@ -1,49 +1,31 @@
-import { remove, upload } from '@/lib/cloudinary/init';
+import { remove } from '@/lib/cloudinary/init';
 import dbConnect from '@/lib/mongoose/init';
-import Post, { TImage } from '@/lib/mongoose/models/Post';
+import Post from '@/lib/mongoose/models/Post';
 import { NextRequest, NextResponse } from 'next/server';
+import Comment from '@/lib/mongoose/models/Comment';
 
-const getPost = async (postId: string, authId: string | null) => {
-  const post = await Post.findById(postId)
-    .populate({
-      path: 'user',
-      select: 'username _id avatar'
-    })
-    .populate({ path: 'comments' });
-  const isLiked = post ? (authId ? post.checkIsLiked(authId) : false) : false;
-  return { ...post, isLiked };
-};
-
-const getPosts = async (authId: string | null) => {
-  const posts = await Post.find()
-    .populate({ path: 'user', select: 'username _id avatar' })
-    .populate({ path: 'comments' })
-    .exec()
-    .then((data) => {
-      return data.map((post) => {
-        const isLiked = authId ? post.checkIsLiked(authId) : false;
-        return { ...post, isLiked };
-      });
-    });
-  return posts;
-};
-
-export async function GET(req: NextRequest) {
+export const POST = async (req: NextRequest) => {
   try {
-    const postId = req.nextUrl.searchParams.get('postId');
-    const authId = req.nextUrl.searchParams.get('authId');
+    const { content, postId, authId } = await req.json();
     await dbConnect();
-    if (postId) {
-      const post = await getPost(postId, authId);
-      return NextResponse.json({ post }, { status: 200 });
-    }
-    const posts = await getPosts(authId);
-    return NextResponse.json({ posts }, { status: 200 });
+    const newComment = new Comment({
+      content,
+      likes: [],
+      replies: [],
+      post: postId,
+      user: authId
+    });
+    const newData = await newComment.save();
+    await Post.findByIdAndUpdate(postId, { $push: { comments: newComment } });
+    const comment = await Comment.findById(newData.id)
+      .populate({ path: 'user', select: 'username avatar _id' })
+      .lean({ virtuals: true });
+    return Response.json({ comment }, { status: 201 });
   } catch (err) {
     console.log(err);
-    return NextResponse.json({ message: 'Server Error' }, { status: 500 });
+    return Response.json({ message: 'Server Error' }, { status: 500 });
   }
-}
+};
 
 export async function DELETE(req: NextRequest) {
   try {
@@ -64,38 +46,38 @@ export async function DELETE(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const formData = await req.formData();
-    const files = formData.getAll('image') as File[];
-    const description = formData.get('description');
-    const location = formData.get('location');
-    const authId = formData.get('authId');
+// export async function POST(req: NextRequest) {
+//   try {
+//     const formData = await req.formData();
+//     const files = formData.getAll('image') as File[];
+//     const description = formData.get('description');
+//     const location = formData.get('location');
+//     const authId = formData.get('authId');
 
-    await dbConnect();
+//     await dbConnect();
 
-    const urls: TImage[] = [];
-    // const { secure_url, public_id } = await upload(files[0]);
-    // urls.push({ publicId: public_id, url: secure_url });
-    for (const file of files) {
-      const { secure_url, public_id } = await upload(file);
-      urls.push({ publicId: public_id, url: secure_url });
-    }
+//     const urls: TImage[] = [];
+//     // const { secure_url, public_id } = await upload(files[0]);
+//     // urls.push({ publicId: public_id, url: secure_url });
+//     for (const file of files) {
+//       const { secure_url, public_id } = await upload(file);
+//       urls.push({ publicId: public_id, url: secure_url });
+//     }
 
-    const newPost = new Post({
-      images: urls,
-      user: authId,
-      comments: [],
-      likes: [],
-      description,
-      location
-    });
+//     const newPost = new Post({
+//       images: urls,
+//       user: authId,
+//       comments: [],
+//       likes: [],
+//       description,
+//       location
+//     });
 
-    const post = await newPost.save();
+//     const post = await newPost.save();
 
-    return Response.json({ post }, { status: 200 });
-  } catch (err) {
-    console.log(err);
-    return Response.json({ message: 'ok' }, { status: 500 });
-  }
-}
+//     return Response.json({ post }, { status: 200 });
+//   } catch (err) {
+//     console.log(err);
+//     return Response.json({ message: 'ok' }, { status: 500 });
+//   }
+// }

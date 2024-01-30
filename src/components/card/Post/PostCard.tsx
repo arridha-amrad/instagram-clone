@@ -1,17 +1,16 @@
 'use client';
 
-import { Button, Input } from '@nextui-org/react';
+import { Button, Spacer } from '@nextui-org/react';
 import UserCardWithTime from '../UseCardWithTime';
 import BookmarkIcon from '@heroicons/react/24/outline/BookmarkIcon';
-import HeartIcon from '@heroicons/react/24/outline/HeartIcon';
 import CommentIcon from '@heroicons/react/24/outline/ChatBubbleLeftIcon';
 import SendIcon from '@heroicons/react/24/outline/PaperAirplaneIcon';
 import { useCallback, useRef, useState } from 'react';
-import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
-import { FaceSmileIcon } from '@heroicons/react/24/solid';
 import { IPost } from '@/actions/server/post';
 import PostCarousel from './PostCarousel';
 import PostLikedButton from './PostLikedBtn';
+import PostCommentInput from './PostCommentForm';
+import CommentItem from './CommentItem';
 
 type Props = {
   post: IPost;
@@ -21,7 +20,6 @@ export default function PostCard({ post }: Props) {
   const [showMoreBtn, setShowMoreBtn] = useState(false);
   const [showMoreText, setShowMoreText] = useState(false);
   const [showLess, setShowLess] = useState(false);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const pObs = useRef<IntersectionObserver>();
 
@@ -38,15 +36,6 @@ export default function PostCard({ post }: Props) {
       pObs.current.observe(element);
     }
   }, []);
-
-  const [comment, setComment] = useState('');
-
-  function onClick(emojiData: EmojiClickData, event: MouseEvent) {
-    setComment(
-      (inputValue) =>
-        inputValue + (emojiData.isCustom ? emojiData.unified : emojiData.emoji)
-    );
-  }
 
   return (
     <article className="w-full">
@@ -67,17 +56,17 @@ export default function PostCard({ post }: Props) {
         </Button>
       </div>
 
-      <h1 className="font-bold px-2">50.000 likes</h1>
+      {post.totalLikes > 0 && (
+        <h1 className="font-bold px-2">{post.totalLikes} likes</h1>
+      )}
 
       <p
         className={`${
           showMoreText ? '' : 'text-ellipsis overflow-hidden whitespace-nowrap'
         }  xl:text-base text-sm w-full px-2`}
       >
-        <span className="font-bold">arridhaamrad</span>&nbsp;&nbsp;Lorem ipsum
-        dolor sit amet, consectetur adipisicing elit. Expedita molestiae
-        cupiditate ut amet, atque pariatur exercitationem nostrum quos fugit
-        voluptatum.
+        <span className="font-bold">arridhaamrad</span>&nbsp;&nbsp;
+        {post.description}
         <span ref={refSpan} />
       </p>
 
@@ -93,6 +82,21 @@ export default function PostCard({ post }: Props) {
           {showMoreText ? 'show less' : 'show more'}
         </Button>
       )}
+
+      {post.totalComments > 0 && (
+        <>
+          <Spacer y={1} />
+          <Button size="sm" variant="light">
+            See {post.totalComments} comments
+          </Button>
+        </>
+      )}
+
+      {post.comments.map(
+        (comment, i) =>
+          i < 3 && <CommentItem comment={comment} key={comment.id} />
+      )}
+
       {showLess && (
         <Button
           onClick={() => {
@@ -105,36 +109,7 @@ export default function PostCard({ post }: Props) {
           {showMoreText ? 'show less' : 'show more'}
         </Button>
       )}
-      <div className="flex relative px-2">
-        <Input
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          type="text"
-          variant="underlined"
-          placeholder="Add comment..."
-        />
-        <Button
-          variant="light"
-          onClick={() => setShowEmojiPicker((val) => !val)}
-          isIconOnly
-          size="sm"
-        >
-          <FaceSmileIcon className="w-5 h-5" />
-        </Button>
-        {showEmojiPicker && (
-          <div className="absolute right-10 bottom-0 z-50 ">
-            <div
-              onClick={() => setShowEmojiPicker(false)}
-              className="fixed inset-0 bg-background/40"
-            />
-            <EmojiPicker
-              onEmojiClick={onClick}
-              previewConfig={{ showPreview: false }}
-              theme={Theme.DARK}
-            />
-          </div>
-        )}
-      </div>
+      <PostCommentInput post={post} />
     </article>
   );
 }

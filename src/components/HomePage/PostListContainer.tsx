@@ -1,7 +1,9 @@
 import { getHomePosts } from '@/actions/server/post';
 import PostList from './PostList';
+import { unstable_noStore } from 'next/cache';
 
 const PostListContainer = async () => {
+  unstable_noStore();
   const posts = await getHomePosts();
 
   return (
