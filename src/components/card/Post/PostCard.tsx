@@ -1,8 +1,7 @@
 'use client';
 
 import { Button, Input } from '@nextui-org/react';
-import UserCardWithTime from './UseCardWithTime';
-import Image from 'next/image';
+import UserCardWithTime from '../UseCardWithTime';
 import BookmarkIcon from '@heroicons/react/24/outline/BookmarkIcon';
 import HeartIcon from '@heroicons/react/24/outline/HeartIcon';
 import CommentIcon from '@heroicons/react/24/outline/ChatBubbleLeftIcon';
@@ -10,8 +9,15 @@ import SendIcon from '@heroicons/react/24/outline/PaperAirplaneIcon';
 import { useCallback, useRef, useState } from 'react';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 import { FaceSmileIcon } from '@heroicons/react/24/solid';
+import { IPost } from '@/actions/server/post';
+import PostCarousel from './PostCarousel';
+import PostLikedButton from './PostLikedBtn';
 
-export default function PostCard() {
+type Props = {
+  post: IPost;
+};
+
+export default function PostCard({ post }: Props) {
   const [showMoreBtn, setShowMoreBtn] = useState(false);
   const [showMoreText, setShowMoreText] = useState(false);
   const [showLess, setShowLess] = useState(false);
@@ -44,22 +50,11 @@ export default function PostCard() {
 
   return (
     <article className="w-full">
-      <UserCardWithTime />
-      <div className="w-full h-full relative max-h-[900px] overflow-hidden border border-skin-base">
-        <Image
-          className="object-cover w-full h-auto"
-          width={1000}
-          height={1000}
-          priority
-          src="https://images.pexels.com/photos/160846/french-bulldog-summer-smile-joy-160846.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-          alt="post"
-        />
-      </div>
+      <UserCardWithTime post={post} />
+      <PostCarousel post={post} />
       <div className="h-12 w-full flex items-center justify-between">
         <div className="flex gap-2">
-          <Button variant="light" isIconOnly>
-            <HeartIcon className="w-7 h-7" />
-          </Button>
+          <PostLikedButton post={post} />
           <Button variant="light" isIconOnly>
             <CommentIcon className="w-7 h-7" />
           </Button>

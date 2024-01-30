@@ -1,4 +1,4 @@
-import PostCard from '@/components/card/PostCard';
+import PostCard from '@/components/card/Post/PostCard';
 import SuggestedUserCard from '@/components/card/SuggestedUserCard';
 import HomeFooter from '@/components/footer/HomeFooter';
 import SearchInput from '@/components/input/SearchInput';

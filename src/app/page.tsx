@@ -2,7 +2,6 @@ import { Button, Divider, Link, Spacer } from '@nextui-org/react';
 
 import FacebookButton from '@/components/button/FacebookButton';
 import ThemeButton from '@/components/button/ThemeButton';
-import PostCard from '@/components/card/PostCard';
 import SuggestedUserCard from '@/components/card/SuggestedUserCard';
 import HomeFooter from '@/components/footer/HomeFooter';
 import LoginForm from '@/components/form/LoginForm';
@@ -13,7 +12,7 @@ import TopBar from '@/components/top-bar/TopBar';
 import getServerSideSession from '@/utils/getServerSideSession';
 import Image from 'next/image';
 import NextLink from 'next/link';
-import PostList from '@/components/HomePage/PostList';
+import PostListContainer from '@/components/HomePage/PostListContainer';
 
 export default async function Page() {
   const session = await getServerSideSession();
@@ -102,7 +101,8 @@ const Home = () => {
         <div className="h-max max-w-xl w-full mx-auto xl:pb-6 ">
           <StoryBar />
         </div>
-        <PostList />
+        <Spacer y={10} />
+        <PostListContainer />
       </div>
       <div className="flex-1 sticky h-screen top-0 max-w-[300px] lg:block hidden">
         <div className="h-[90px] w-full sticky top-0 flex items-center">

@@ -4,8 +4,9 @@ import getServerSideSession from '@/utils/getServerSideSession';
 import { baseURL } from '../variables';
 import { revalidateTag, unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
-import Post from '@/lib/mongoose/models/Post';
+import Post, { TPost } from '@/lib/mongoose/models/Post';
 import dbConnect from '@/lib/mongoose/init';
+import { TComment } from '@/lib/mongoose/models/Comment';
 
 export const createPost = async (formData: FormData) => {
   const session = await getServerSideSession();
@@ -33,6 +34,16 @@ export const getPostById = async (postId: string) => {
   return data.post;
 };
 
+export type IPost = TPost & {
+  user: {
+    username: string;
+    _id: string;
+    avatar: string;
+  };
+  isLiked: boolean;
+  highlightedComment: TComment[];
+};
+
 export const getHomePosts = unstable_cache(
   async () => {
     const session = await getServerSideSession();
@@ -48,7 +59,8 @@ export const getHomePosts = unstable_cache(
           const isLiked = authId
             ? !!post.likes.find((user) => user._id.toString() === authId)
             : false;
-          return { ...post, isLiked };
+          const result = { ...post, isLiked } as unknown;
+          return result as IPost;
         });
       });
     return posts;

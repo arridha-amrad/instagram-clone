@@ -8,6 +8,7 @@ import getServerSideSession from '@/utils/getServerSideSession';
 import { Inter } from 'next/font/google';
 import BottomBar from '@/components/bottom-bar/BottomBar';
 import Sidebar from '@/components/sidebar';
+import { PostProvider } from '@/providers/PostProvider';
 
 export const metadata: Metadata = {
   title: 'Nextgram',
@@ -30,19 +31,21 @@ export default async function RootLayout({
       <body>
         <AuthProvider>
           <NextTopLoader showSpinner={false} color="#0095F6" />
-          <Providers>
-            {session ? (
-              <div className="flex w-full">
-                <BottomBar />
-                <div className="sticky h-screen inset-y-0 left-0">
-                  <Sidebar />
+          <PostProvider>
+            <Providers>
+              {session ? (
+                <div className="flex w-full">
+                  <BottomBar />
+                  <div className="sticky h-screen inset-y-0 left-0">
+                    <Sidebar />
+                  </div>
+                  <div className="w-full">{children}</div>
                 </div>
-                <div className="w-full">{children}</div>
-              </div>
-            ) : (
-              children
-            )}
-          </Providers>
+              ) : (
+                children
+              )}
+            </Providers>
+          </PostProvider>
         </AuthProvider>
       </body>
     </html>
