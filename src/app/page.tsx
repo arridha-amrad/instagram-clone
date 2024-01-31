@@ -98,10 +98,10 @@ const Home = () => {
     <div className="flex h-full w-full gap-4">
       <div className="flex-[2] h-full w-full">
         <TopBar />
-        <div className="h-max max-w-xl w-full mx-auto xl:pb-6 ">
+        <div className="h-max max-w-xl w-full mx-auto xl:pb-3 ">
+          <Spacer y={4} />
           <StoryBar />
         </div>
-        <Spacer y={2} />
         <PostListContainer />
       </div>
       <div className="flex-1 sticky h-screen top-0 max-w-[300px] lg:block hidden">

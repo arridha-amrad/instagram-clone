@@ -3,6 +3,7 @@ import dbConnect from '@/lib/mongoose/init';
 import Post, { TImage } from '@/lib/mongoose/models/Post';
 import { NextRequest, NextResponse } from 'next/server';
 import Comment from '@/lib/mongoose/models/Comment';
+import { IPost } from '@/actions/server/post';
 
 export async function DELETE(req: NextRequest) {
   try {
@@ -52,7 +53,22 @@ export async function POST(req: NextRequest) {
 
     const post = await newPost.save();
 
-    return Response.json({ post }, { status: 200 });
+    const populatedPost = await Post.findById(newPost.id)
+      .populate({
+        path: 'user',
+        select: 'username id avatar'
+      })
+      .lean({ virtuals: true })
+      .exec()
+      .then((data) => {
+        const isLiked = authId
+          ? !!data?.likes.find((id) => id.toString() === authId)
+          : false;
+
+        const result = { ...data, isLiked } as unknown;
+        return result as IPost;
+      });
+    return Response.json({ post: populatedPost }, { status: 200 });
   } catch (err) {
     console.log(err);
     return Response.json({ message: 'ok' }, { status: 500 });

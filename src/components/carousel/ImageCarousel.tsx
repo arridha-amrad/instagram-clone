@@ -10,7 +10,7 @@ type Props = {
   urls: string[];
 };
 
-export default function Carousel({ urls }: Props) {
+export default function ImageCarousel({ urls }: Props) {
   const total = urls.length;
   const [previewIndex, setPreviewIndex] = useState(0);
 
@@ -32,12 +32,12 @@ export default function Carousel({ urls }: Props) {
     });
   };
   return (
-    <div className="relative max-w-lg w-full h-full rounded-lg">
+    <div className="relative w-full h-full rounded-lg">
       {total > 1 && (
         <Button
           onClick={prevPreview}
           variant="flat"
-          className={`absolute top-1/2 left-3 z-50`}
+          className={`absolute top-1/2 left-3 -translate-y-1/2`}
           isIconOnly
           startContent={<ChevronLeftIcon className="w-5 h-5" />}
         />
@@ -45,14 +45,15 @@ export default function Carousel({ urls }: Props) {
       <Image
         alt="preview"
         src={urls[previewIndex]}
-        fill
-        className="object-cover"
+        height={1000}
+        width={1000}
+        className="object-cover w-full h-full"
       />
       {total > 1 && (
         <Button
           onClick={nextPreview}
           variant="flat"
-          className={`absolute top-1/2 right-3 z-50 `}
+          className={`absolute top-1/2 right-3 -translate-y-1/2 `}
           isIconOnly
           startContent={<ChevronRightIcon className="w-5 h-5" />}
         />

@@ -12,7 +12,7 @@ import {
 import { useSidebarContext } from './SidebarContext';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import Carousel from '../carousel';
+import Carousel from '../carousel/ImageCarousel';
 import PostForm from '../form/PostForm';
 
 export default function CreateBtn() {

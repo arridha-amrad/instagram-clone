@@ -89,8 +89,8 @@ export default function StoryBar() {
           <Button
             onClick={goLeft}
             size="sm"
-            variant="flat"
             isIconOnly
+            variant="solid"
             color="default"
           >
             <ChevronLeftIcon className="w-5 h-5" />
@@ -103,8 +103,8 @@ export default function StoryBar() {
           <Button
             onClick={goRight}
             size="sm"
-            variant="flat"
             isIconOnly
+            variant="solid"
             color="default"
           >
             <ChevronRightIcon className="w-5 h-5" />

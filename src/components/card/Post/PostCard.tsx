@@ -9,8 +9,9 @@ import { useCallback, useRef, useState } from 'react';
 import PostCommentInput from '../../form/PostCommentForm';
 import UserCardWithTime from '../UseCardWithTime';
 import CommentItem from './CommentItem';
-import PostCarousel from './PostCarousel';
 import PostLikedButton from './PostLikedBtn';
+import ImageCarousel from '@/components/carousel/ImageCarousel';
+import Link from 'next/link';
 
 type Props = {
   post: IPost;
@@ -37,14 +38,18 @@ export default function PostCard({ post }: Props) {
     }
   }, []);
 
+  const images = post.images.map((i) => i.url);
+
   return (
     <article className="w-full">
       <UserCardWithTime post={post} />
-      <PostCarousel post={post} />
+      <div className="max-h-[700px] overflow-hidden border border-skin-base">
+        <ImageCarousel urls={images} />
+      </div>
       <div className="h-12 w-full flex items-center justify-between">
         <div className="flex gap-2">
           <PostLikedButton post={post} />
-          <Button variant="light" isIconOnly>
+          <Button as={Link} href={`/p/${post.id}`} variant="light" isIconOnly>
             <CommentIcon className="w-7 h-7" />
           </Button>
           <Button variant="light" isIconOnly>
@@ -86,7 +91,7 @@ export default function PostCard({ post }: Props) {
       {post.totalComments > 0 && (
         <>
           <Spacer y={1} />
-          <Button size="sm" variant="light">
+          <Button as={Link} href={`/p/${post.id}`} size="sm" variant="light">
             See {post.totalComments} comments
           </Button>
         </>

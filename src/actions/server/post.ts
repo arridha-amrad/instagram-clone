@@ -39,14 +39,26 @@ export const createPost = async (formData: FormData) => {
 
 export const getPostById = async (postId: string) => {
   const session = await getServerSideSession();
-  const response = await fetch(
-    `${baseURL}/api/post?authId=${session?.user.id}&postId=${postId}`,
-    {
-      next: { tags: [`post-${postId}`] }
-    }
-  );
-  const data = await response.json();
-  return data.post;
+  const authId = session?.user.id;
+  await dbConnect();
+  const post = await Post.findById(postId)
+    .populate({ path: 'user', select: 'username id avatar' })
+    .populate({
+      path: 'comments',
+      options: { sort: { createdAt: 'desc' } },
+      populate: { path: 'user', select: 'username avatar id' }
+    })
+    .lean({ virtuals: true })
+    .exec()
+    .then((data) => {
+      const isLiked = authId
+        ? !!data?.likes.find((id) => id.toString() === authId)
+        : false;
+
+      const result = { ...data, isLiked } as unknown;
+      return result as IPost;
+    });
+  return post;
 };
 
 export type IUser = {
