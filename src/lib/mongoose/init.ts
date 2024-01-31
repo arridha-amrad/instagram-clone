@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import './models/Comment';
-import './models/Post';
-import './models/User';
+import './models/Comment/Comment';
+import './models/Post/Post';
+import './models/User/User';
 
 declare global {
   var mongoose: any; // This must be a `var` and not a `let / const`

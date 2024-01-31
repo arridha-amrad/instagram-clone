@@ -1,34 +1,11 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose from 'mongoose';
 import { mongooseLeanVirtuals } from 'mongoose-lean-virtuals';
-import User from './User';
-import Post from './Post';
-
-export type TComment = {
-  id: string;
-  content: string;
-  user: mongoose.Types.ObjectId;
-  post: mongoose.Types.ObjectId;
-  likes: mongoose.Types.ObjectId[];
-  replies: mongoose.Types.ObjectId[];
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type TCommentVirtual = {
-  totalLikes: number;
-  totalReplies: number;
-};
-
-export type TCommentMethods = {
-  checkIsLiked: (authId: string) => boolean;
-};
-
-export type TCommentModel = Model<
+import {
   TComment,
-  {},
   TCommentMethods,
+  TCommentModel,
   TCommentVirtual
->;
+} from './types';
 
 const schema = new mongoose.Schema<
   TComment,

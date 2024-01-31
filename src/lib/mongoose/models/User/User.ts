@@ -1,43 +1,8 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose from 'mongoose';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
+import { IUser, IUserMethods, IUserVirtuals, UserModel } from './types';
 
 const providers = ['facebook', 'default'];
-
-export type TUser = {
-  id: string;
-  avatar: string;
-  name: string;
-  username: string;
-};
-
-export type IUser = {
-  id: string;
-  name: string;
-  username: string;
-  email: string;
-  provider: string;
-  followers?: mongoose.Types.ObjectId[];
-  followings?: mongoose.Types.ObjectId[];
-  searchedUsers?: mongoose.Types.ObjectId[];
-  avatar?: string;
-  password?: string;
-  occupation?: string;
-  threadUsername?: string;
-  bio?: string;
-  web?: string;
-  avatarPublicId?: string;
-};
-
-export type IUserVirtuals = {
-  totalFollowings: number;
-  totalFollowers: number;
-};
-
-export type IUserMethods = {
-  checkIsFollow: (id: string) => boolean;
-};
-
-type UserModel = Model<IUser, {}, IUserMethods, IUserVirtuals>; // <-- add virtuals here...
 
 const schema = new mongoose.Schema<
   IUser,

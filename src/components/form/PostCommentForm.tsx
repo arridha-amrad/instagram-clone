@@ -1,7 +1,7 @@
 'use client';
 
-import { IPost } from '@/actions/server/post';
 import { baseURL } from '@/actions/variables';
+import { IPost } from '@/lib/mongoose/models/Post/types';
 import usePostsStore from '@/lib/zustand/store/postStore';
 import FaceSmileIcon from '@heroicons/react/24/outline/FaceSmileIcon';
 import { Button, Input } from '@nextui-org/react';

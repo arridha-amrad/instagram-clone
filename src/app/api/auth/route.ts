@@ -1,7 +1,8 @@
 export const dynamic = 'force-dynamic';
 
 import dbConnect from '@/lib/mongoose/init';
-import User, { IUser } from '@/lib/mongoose/models/User';
+import User from '@/lib/mongoose/models/User/User';
+import { IUser } from '@/lib/mongoose/models/User/types';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {

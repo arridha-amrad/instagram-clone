@@ -1,6 +1,5 @@
 'use client';
 
-import { IPost } from '@/actions/server/post';
 import BookmarkIcon from '@heroicons/react/24/outline/BookmarkIcon';
 import CommentIcon from '@heroicons/react/24/outline/ChatBubbleLeftIcon';
 import SendIcon from '@heroicons/react/24/outline/PaperAirplaneIcon';
@@ -12,6 +11,7 @@ import CommentItem from './CommentItem';
 import PostLikedButton from './PostLikedBtn';
 import ImageCarousel from '@/components/carousel/ImageCarousel';
 import Link from 'next/link';
+import { IPost } from '@/lib/mongoose/models/Post/types';
 
 type Props = {
   post: IPost;

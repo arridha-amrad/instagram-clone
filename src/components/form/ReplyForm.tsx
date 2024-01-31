@@ -1,7 +1,7 @@
 'use client';
 
-import { IPost } from '@/actions/server/post';
 import { baseURL } from '@/actions/variables';
+import { IPost } from '@/lib/mongoose/models/Post/types';
 import usePostsStore from '@/lib/zustand/store/postStore';
 import FaceSmileIcon from '@heroicons/react/24/outline/FaceSmileIcon';
 import { Button, Input } from '@nextui-org/react';
@@ -81,7 +81,7 @@ const ReplyForm = ({ post }: Props) => {
           <FaceSmileIcon className="w-5 h-5" />
         </Button>
         {showEmojiPicker && (
-          <div className="absolute right-10 bottom-0 z-50 ">
+          <div className="absolute right-10 bottom-full z-50 ">
             <div
               onClick={() => setShowEmojiPicker(false)}
               className="fixed inset-0 bg-background/40"

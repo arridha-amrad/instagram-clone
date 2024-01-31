@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Comment from '@/lib/mongoose/models/Comment';
+import Comment from '@/lib/mongoose/models/Comment/Comment';
 
 export async function POST(req: NextRequest) {
   try {

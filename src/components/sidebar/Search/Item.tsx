@@ -3,24 +3,24 @@
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { Button, User } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-import { TSearchResult } from './SearchHistory';
 import {
   addToSearchHistory,
   deleteSearchHistories
 } from '@/actions/server/user';
+import { TUser } from '@/lib/mongoose/models/User/types';
 
 type Props = {
-  item: TSearchResult;
+  item: TUser;
   isRemoveAble?: boolean;
 };
 
 const Item = ({ item, isRemoveAble }: Props) => {
-  const { _id, name, username, avatar } = item;
+  const { id, name, username, avatar } = item;
   const defaultAvatar = `${process.env.NEXT_PUBLIC_URL}/default_profile.jpg`;
   const router = useRouter();
 
   const navigateAndSave = async () => {
-    await addToSearchHistory(_id);
+    await addToSearchHistory(id);
     router.push(`/${username}`);
   };
 
@@ -41,7 +41,7 @@ const Item = ({ item, isRemoveAble }: Props) => {
           variant="light"
           onClick={async (e) => {
             e.stopPropagation();
-            await deleteSearchHistories(_id);
+            await deleteSearchHistories(id);
           }}
           isIconOnly
           startContent={<XMarkIcon className="w-5 h-5" />}

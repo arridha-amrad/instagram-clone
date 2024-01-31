@@ -1,6 +1,6 @@
 'use client';
 
-import { TProfileData } from '@/app/api/user/getProfileData';
+import { TProfileData } from '@/lib/mongoose/models/User/types';
 
 type Props = {
   user: TProfileData;

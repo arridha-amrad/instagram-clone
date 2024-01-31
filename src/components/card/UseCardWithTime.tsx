@@ -12,7 +12,7 @@ import {
 import Image from 'next/image';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { baseURL } from '@/actions/variables';
-import { IPost } from '@/actions/server/post';
+import { IPost } from '@/lib/mongoose/models/Post/types';
 
 type Props = {
   post: IPost;

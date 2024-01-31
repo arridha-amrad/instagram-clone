@@ -1,5 +1,6 @@
 import dbConnect from '@/lib/mongoose/init';
-import User, { TUser } from '@/lib/mongoose/models/User';
+import User from '@/lib/mongoose/models/User/User';
+import { TUser } from '@/lib/mongoose/models/User/types';
 import { NextRequest } from 'next/server';
 
 export async function DELETE(req: Request) {

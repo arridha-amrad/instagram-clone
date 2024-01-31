@@ -2,7 +2,7 @@
 
 import { Button } from '@nextui-org/react';
 import { followUser } from '@/actions/server/user';
-import { TProfileData } from '@/app/api/user/getProfileData';
+import { TProfileData } from '@/lib/mongoose/models/User/types';
 
 type Props = {
   user: TProfileData;

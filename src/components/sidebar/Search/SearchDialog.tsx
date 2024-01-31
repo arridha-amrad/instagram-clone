@@ -6,7 +6,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import Item from './Item';
 import { useSession } from 'next-auth/react';
 import { searchUser } from '@/actions/server/user';
-import { TUser } from '@/lib/mongoose/models/User';
+import { TUser } from '@/lib/mongoose/models/User/types';
 
 type Props = {
   children: ReactNode;
@@ -32,7 +32,9 @@ const SearchDialog = ({ children }: Props) => {
     setIsLoading(true);
     try {
       const data = await searchUser(key);
-      setResult(data.users);
+      console.log({ data });
+
+      setResult(data);
     } catch (err) {
       throw err;
     } finally {
@@ -40,10 +42,14 @@ const SearchDialog = ({ children }: Props) => {
     }
   };
 
-  useEffect(() => {
-    if (!key) return;
-    initSearch();
-  }, [key]);
+  useEffect(
+    () => {
+      if (!key) return;
+      initSearch();
+    },
+    // eslint-disable-next-line
+    [key]
+  );
 
   return (
     <>

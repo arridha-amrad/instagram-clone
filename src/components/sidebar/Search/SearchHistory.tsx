@@ -5,6 +5,9 @@ import { getSearchHistories } from '@/actions/server/user';
 
 export default async function SearchHistory() {
   const histories = await getSearchHistories();
+
+  if (histories.length === 0) return null;
+
   return (
     <>
       <div className="flex justify-between items-center px-4 py-2">

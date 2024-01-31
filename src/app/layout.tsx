@@ -8,7 +8,6 @@ import getServerSideSession from '@/utils/getServerSideSession';
 import { Inter } from 'next/font/google';
 import BottomBar from '@/components/bottom-bar/BottomBar';
 import Sidebar from '@/components/sidebar';
-import { PostProvider } from '@/providers/PostProvider';
 
 export const metadata: Metadata = {
   title: 'Nextgram',

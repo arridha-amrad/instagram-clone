@@ -11,12 +11,14 @@ type Props = {
 const PostList = ({ data }: Props) => {
   const { setPosts, posts, setLoading, isLoading } = usePostsStore();
 
-  useEffect(() => {
-    setPosts(JSON.parse(data));
-    setLoading(false);
-  }, [data]);
-
-  console.log({ posts });
+  useEffect(
+    () => {
+      setPosts(JSON.parse(data));
+      setLoading(false);
+    },
+    // eslint-disable-next-line
+    [data]
+  );
 
   if (!!posts && isLoading) {
     return <p>loading...</p>;

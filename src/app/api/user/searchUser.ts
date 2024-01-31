@@ -1,5 +1,5 @@
 import dbConnect from '@/lib/mongoose/init';
-import User from '@/lib/mongoose/models/User';
+import User from '@/lib/mongoose/models/User/User';
 
 export default async function searchUser(key: string) {
   try {
@@ -13,6 +13,7 @@ export default async function searchUser(key: string) {
         { name: { $regex: searchRgx, $options: 'i' } }
       ]
     })
+      .lean({ virtuals: true })
       .select('name username avatar id')
       .limit(10);
 

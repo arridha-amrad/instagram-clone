@@ -1,4 +1,4 @@
-import { IPost } from '@/actions/server/post';
+import { IPost } from '@/lib/mongoose/models/Post/types';
 import ChevronLeftIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
 import ChevronRightIcon from '@heroicons/react/24/outline/ChevronRightIcon';
 import { Button } from '@nextui-org/react';

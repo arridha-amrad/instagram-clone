@@ -1,5 +1,5 @@
 import dbConnect from '@/lib/mongoose/init';
-import User from '@/lib/mongoose/models/User';
+import User from '@/lib/mongoose/models/User/User';
 import { SignUpDto } from '@/lib/zod/signup';
 import bcrypt from 'bcrypt';
 import { NextResponse } from 'next/server';
@@ -36,7 +36,10 @@ export async function POST(request: Request) {
       email,
       name: fullName,
       password: hashedPassword,
-      username
+      username,
+      followers: [],
+      followings: [],
+      searchedUsers: []
     });
     await newUser.save();
     return NextResponse.json(

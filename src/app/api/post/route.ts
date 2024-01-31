@@ -1,8 +1,8 @@
 import { remove, upload } from '@/lib/cloudinary/init';
 import dbConnect from '@/lib/mongoose/init';
-import Post, { TImage } from '@/lib/mongoose/models/Post';
+import Post from '@/lib/mongoose/models/Post/Post';
+import { IPost, TImage } from '@/lib/mongoose/models/Post/types';
 import { NextRequest, NextResponse } from 'next/server';
-import { IPost } from '@/actions/server/post';
 
 export async function DELETE(req: NextRequest) {
   try {

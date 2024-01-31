@@ -1,7 +1,7 @@
 import dbConnect from '@/lib/mongoose/init';
 import { NextRequest } from 'next/server';
-import Comment from '@/lib/mongoose/models/Comment';
-import Post from '@/lib/mongoose/models/Post';
+import Comment from '@/lib/mongoose/models/Comment/Comment';
+import Post from '@/lib/mongoose/models/Post/Post';
 
 export const POST = async (req: NextRequest) => {
   try {

@@ -12,7 +12,7 @@ import {
 import Image from 'next/image';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { baseURL } from '@/actions/variables';
-import { IPost } from '@/actions/server/post';
+import { IPost } from '@/lib/mongoose/models/Post/types';
 
 type Props = {
   post: IPost;
@@ -27,14 +27,14 @@ export default function PostUserWithFollowStatus({ post }: Props) {
         <Image
           width={45}
           height={45}
-          className="rounded-full"
+          className="rounded-full flex-shrink-0 w-[45px] aspect-square "
           alt="avatar"
           src={avatar}
         />
         <div className="font-semibold">
           {post.user.username}
           <span className="text-skin-accent text-sm font-semibold">
-            &nbsp;•&nbsp; <span className="text-foreground">Following</span>
+            &nbsp; •&nbsp; <span className="text-foreground">Following</span>
           </span>
         </div>
       </div>

@@ -1,41 +1,13 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose from 'mongoose';
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
+import { TImage, TPost, TPostModel, TPostVirtual } from './types';
 
-export type TImage = {
-  url: string;
-  publicId: string;
-  height: number;
-  width: number;
-};
-
-export type TPost = {
-  id: string;
-  description: string;
-  location: string;
-  images: TImage[];
-  likes: mongoose.Types.ObjectId[];
-  comments: mongoose.Types.ObjectId[];
-  user: mongoose.Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type TPostVirtual = {
-  totalLikes: number;
-  totalComments: number;
-};
-
-type TPostModel = Model<TPost, {}, {}, TPostVirtual>;
-
-const imageSchema = new mongoose.Schema<TImage>(
-  {
-    publicId: String,
-    url: String,
-    height: Number,
-    width: Number
-  },
-  { _id: false }
-);
+const imageSchema = new mongoose.Schema<TImage>({
+  publicId: String,
+  url: String,
+  height: Number,
+  width: Number
+});
 
 const schema = new mongoose.Schema<TPost, TPostModel, TPostVirtual>(
   {

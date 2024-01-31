@@ -22,8 +22,16 @@ const Page = async ({ params: { postId } }: Props) => {
   unstable_noStore();
   const post = await getPostById(postId);
 
+  if (!post) {
+    return (
+      <div>
+        <p>Post not found</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-h-[700px] h-full mx-auto w-full my-8 flex">
+    <div className="min-h-screen h-full mx-auto w-full flex">
       <div className="w-full max-w-[60%] overflow-hidden h-full">
         <ImageCarousel urls={post.images.map((i) => i.url)} />
       </div>
@@ -32,32 +40,35 @@ const Page = async ({ params: { postId } }: Props) => {
           <PostUserWithFollowStatus post={post} />
         </div>
         <Divider />
-        <div className="flex px-4 justify-between items-center py-2">
-          <div className="flex items-start gap-4">
-            <Image
-              width={45}
-              height={45}
-              className="rounded-full"
-              alt="avatar"
-              src={getAvatar(post.user.avatar)}
-            />
-            <div>
-              <div className="font-semibold">
-                {post.user.username}
-                <span className="font-normal text-skin-accent">
-                  &nbsp;&nbsp;5 hours
-                </span>
+        <div className="flex-1 w-full">
+          <div className="flex px-4 justify-between items-center py-2">
+            <div className="flex items-start gap-4">
+              <Image
+                width={45}
+                height={45}
+                className="rounded-full w-[45px] aspect-square object-cover"
+                alt="avatar"
+                src={getAvatar(post.user.avatar)}
+              />
+              <div>
+                <div className="font-semibold">
+                  {post.user.username}
+                  <span className="font-normal text-skin-accent">
+                    &nbsp;&nbsp;5 hours
+                  </span>
+                </div>
+                <p className="text-small">{post.description}</p>
               </div>
-              <p className="text-small">{post.description}</p>
             </div>
+          </div>
+          <Divider />
+          <div className="py-3 flex-1 px-2 space-y-4 overflow-y-auto overflow-x-hidden">
+            {post.comments.map((comment) => (
+              <CommentItemBig comment={comment} key={comment.id} />
+            ))}
           </div>
         </div>
         <Divider />
-        <div className="py-3 flex-1 px-2 space-y-4 overflow-y-auto overflow-x-hidden">
-          {post.comments.map((comment) => (
-            <CommentItemBig comment={comment} key={comment.id} />
-          ))}
-        </div>
         <div className="w-full py-2 flex px-4">
           <div className="flex-1 space-x-1">
             <PostLikedButton post={post} />

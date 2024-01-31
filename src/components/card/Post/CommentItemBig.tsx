@@ -1,6 +1,7 @@
-import { IComment } from '@/actions/server/post';
+import { IComment } from '@/lib/mongoose/models/Comment/types';
 import getAvatar from '@/utils/getAvatar';
 import { HeartIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 
@@ -44,7 +45,13 @@ const CommentItemBig = ({ comment }: Props) => {
           size="sm"
           variant="light"
           isIconOnly
-          startContent={<HeartIcon className="w-4 h-4" />}
+          startContent={
+            comment.isLiked ? (
+              <HeartIconSolid className="w-4 h-4 text-pink-600" />
+            ) : (
+              <HeartIcon className="w-4 h-4" />
+            )
+          }
         />
       </div>
     </div>

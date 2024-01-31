@@ -1,11 +1,13 @@
 'use client';
 
-import { IComment } from '@/actions/server/post';
-import { baseURL } from '@/actions/variables';
+import { IComment } from '@/lib/mongoose/models/Comment/types';
 import { HeartIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import { Button } from '@nextui-org/react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { likeComment as like } from '@/actions/server/comment';
 
 type Props = {
   comment: IComment;
@@ -14,16 +16,14 @@ type Props = {
 const CommentItem = ({ comment }: Props) => {
   const { data } = useSession();
   const router = useRouter();
+  const [isLiked, setLiked] = useState(comment.isLiked);
   const likeComment = async () => {
     if (!data) {
       router.replace('/accounts/login');
       return;
     }
-    console.log(comment.id);
-    // await fetch(`${baseURL}/api/comment/like`, {
-    //   method: 'POST',
-    //   body: JSON.stringify({ authId: data.user.id, commentId: comment.id })
-    // });
+    setLiked((val) => !val);
+    await like(comment.id);
   };
   return (
     <div className="flex w-full items-center px-2">
@@ -32,13 +32,13 @@ const CommentItem = ({ comment }: Props) => {
       </span>
       <span className="text-sm flex-1">{comment.content}</span>
       <div className="">
-        <Button
-          onClick={likeComment}
-          size="sm"
-          variant="light"
-          isIconOnly
-          startContent={<HeartIcon className="w-4 h-4" />}
-        />
+        <Button onClick={likeComment} size="sm" variant="light" isIconOnly>
+          {isLiked ? (
+            <HeartIconSolid className="w-4 h-4 text-pink-600" />
+          ) : (
+            <HeartIcon className="w-4 h-4" />
+          )}
+        </Button>
       </div>
     </div>
   );

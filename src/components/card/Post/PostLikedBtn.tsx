@@ -1,11 +1,11 @@
 'use client';
 
-import { IPost } from '@/actions/server/post';
 import usePostsStore from '@/lib/zustand/store/postStore';
 import HeartIcon from '@heroicons/react/24/outline/HeartIcon';
 import HeartIconSolid from '@heroicons/react/24/solid/HeartIcon';
 import { Button } from '@nextui-org/react';
 import { likePost as like } from '@/actions/server/post';
+import { IPost } from '@/lib/mongoose/models/Post/types';
 
 type Props = {
   post: IPost;

@@ -4,9 +4,11 @@ import getServerSideSession from '@/utils/getServerSideSession';
 import { baseURL } from '../variables';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
-import Post, { TPost } from '@/lib/mongoose/models/Post';
+import Post from '@/lib/mongoose/models/Post/Post';
 import dbConnect from '@/lib/mongoose/init';
-import { TComment } from '@/lib/mongoose/models/Comment';
+import { IComment } from '@/lib/mongoose/models/Comment/types';
+import { IPost } from '@/lib/mongoose/models/Post/types';
+import { checkIsExists } from '@/lib/mongoose/models/Post/utils';
 
 export const likePost = async (postId: string) => {
   const session = await getServerSideSession();
@@ -24,19 +26,6 @@ export const likePost = async (postId: string) => {
   }
 };
 
-export const createPost = async (formData: FormData) => {
-  const session = await getServerSideSession();
-  if (!session) {
-    redirect('/accounts/login');
-  }
-  const newForm = formData;
-  newForm.append('authId', session.user.id);
-  await fetch(`${baseURL}/api/post`, {
-    method: 'POST',
-    body: newForm
-  });
-};
-
 export const getPostById = async (postId: string) => {
   const session = await getServerSideSession();
   const authId = session?.user.id;
@@ -45,41 +34,26 @@ export const getPostById = async (postId: string) => {
     .populate({ path: 'user', select: 'username id avatar' })
     .populate({
       path: 'comments',
-      options: { sort: { createdAt: 'desc' } },
+      options: { sort: { createdAt: 'desc' }, limit: 5 },
       populate: { path: 'user', select: 'username avatar id' }
     })
     .lean({ virtuals: true })
     .exec()
     .then((data) => {
-      const isLiked = authId
-        ? !!data?.likes.find((id) => id.toString() === authId)
-        : false;
-
+      if (!data) return null;
+      const isLiked = checkIsExists(data.likes, authId);
+      const commentIds = data.comments as unknown;
+      const comments = commentIds as IComment[];
+      const c = comments.map((comment) => {
+        const isLiked = checkIsExists(comment.likes, authId);
+        return { ...comment, isLiked };
+      });
+      // @ts-ignore
+      data.comments = [...c];
       const result = { ...data, isLiked } as unknown;
       return result as IPost;
     });
   return post;
-};
-
-export type IUser = {
-  username: string;
-  id: string;
-  avatar: string;
-};
-
-export type IComment = Omit<TComment, 'user'> & {
-  _id: string;
-  user: IUser;
-  isLiked: boolean;
-};
-
-export type IPost = Omit<TPost, 'comments'> & {
-  _id: string;
-  user: IUser;
-  isLiked: boolean;
-  comments: IComment[];
-  totalComments: number;
-  totalLikes: number;
 };
 
 export const getHomePosts = async () => {
@@ -98,10 +72,16 @@ export const getHomePosts = async () => {
     .exec()
     .then((data) => {
       return data.map((post) => {
-        const isLiked = authId
-          ? !!post.likes.find((id) => id.toString() === authId)
-          : false;
-        const result = { ...post, isLiked } as unknown;
+        const isPostLiked = checkIsExists(post.likes, authId);
+        const pComments = post.comments as unknown;
+        const comments = pComments as IComment[];
+        const c = comments.map((comment) => {
+          const isLiked = checkIsExists(comment.likes, authId);
+          return { ...comment, isLiked };
+        });
+        // @ts-ignore
+        post['comments'] = [...c];
+        const result = { ...post, isLiked: isPostLiked } as unknown;
         return result as IPost;
       });
     });

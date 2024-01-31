@@ -1,4 +1,5 @@
-import { IComment, IPost } from '@/actions/server/post';
+import { IComment } from '@/lib/mongoose/models/Comment/types';
+import { IPost } from '@/lib/mongoose/models/Post/types';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 

@@ -1,5 +1,4 @@
 import { fetchProfile } from '@/actions/server/user';
-import { TProfileData } from '@/app/api/user/getProfileData';
 import FollowButton from '@/components/ProfilePage/FollowButton';
 import MessageButton from '@/components/ProfilePage/MessageBtn';
 import ProfileEditButton from '@/components/ProfilePage/ProfileEditBtn';
@@ -13,6 +12,7 @@ import TotalFollowings from '@/components/ProfilePage/TotalFollowings';
 import TotalPosts from '@/components/ProfilePage/TotalPosts';
 import UpdateableAvatar from '@/components/avatar/UpdatableAvatar';
 import ProfileOtherMenuButton from '@/components/button/ProfileOtherMenuButton';
+import { TProfileData } from '@/lib/mongoose/models/User/types';
 import getServerSideSession from '@/utils/getServerSideSession';
 import { Avatar, Button, Link, Spacer } from '@nextui-org/react';
 import { ReactNode } from 'react';
@@ -29,7 +29,8 @@ export default async function ProfileLayout({
   children,
   params: { username }
 }: Props) {
-  const user = (await fetchProfile(username)) as TProfileData | null;
+  const user = (await fetchProfile(username)) as any;
+
   return (
     <main className="w-full max-w-5xl mx-auto sm:mt-4 sm:pl-10">
       {user ? (
