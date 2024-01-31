@@ -32,12 +32,12 @@ export default function ImageCarousel({ urls }: Props) {
     });
   };
   return (
-    <div className="relative w-full h-full rounded-lg">
+    <div className="relative group w-full h-full rounded-lg">
       {total > 1 && (
         <Button
           onClick={prevPreview}
           variant="flat"
-          className={`absolute top-1/2 left-3 -translate-y-1/2`}
+          className={`absolute group-hover:opacity-100 opacity-0 top-1/2 left-3 -translate-y-1/2`}
           isIconOnly
           startContent={<ChevronLeftIcon className="w-5 h-5" />}
         />
@@ -54,7 +54,7 @@ export default function ImageCarousel({ urls }: Props) {
         <Button
           onClick={nextPreview}
           variant="flat"
-          className={`absolute top-1/2 right-3 -translate-y-1/2 `}
+          className={`absolute group-hover:opacity-100 opacity-0 top-1/2 right-3 -translate-y-1/2 `}
           isIconOnly
           startContent={<ChevronRightIcon className="w-5 h-5" />}
         />

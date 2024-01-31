@@ -2,20 +2,21 @@
 
 import { useEffect } from 'react';
 import PostCard from '../card/Post/PostCard';
-import { IPost } from '@/actions/server/post';
 import usePostsStore from '@/lib/zustand/store/postStore';
 
 type Props = {
-  data: IPost[];
+  data: string;
 };
 
 const PostList = ({ data }: Props) => {
   const { setPosts, posts, setLoading, isLoading } = usePostsStore();
 
   useEffect(() => {
-    setPosts(data);
+    setPosts(JSON.parse(data));
     setLoading(false);
   }, [data]);
+
+  console.log({ posts });
 
   if (!!posts && isLoading) {
     return <p>loading...</p>;

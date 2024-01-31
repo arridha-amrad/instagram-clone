@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       location
     });
 
-    const post = await newPost.save();
+    await newPost.save();
 
     const populatedPost = await Post.findById(newPost.id)
       .populate({

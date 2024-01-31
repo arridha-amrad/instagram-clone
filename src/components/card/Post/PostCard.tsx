@@ -104,7 +104,7 @@ export default function PostCard({ post }: Props) {
 
       {post.comments.map(
         (comment, i) =>
-          i < 3 && <CommentItem comment={comment} key={comment.id} />
+          i < 3 && <CommentItem comment={comment} key={comment._id} />
       )}
 
       {showLess && (

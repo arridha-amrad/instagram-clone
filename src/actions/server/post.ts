@@ -68,10 +68,13 @@ export type IUser = {
 };
 
 export type IComment = Omit<TComment, 'user'> & {
+  _id: string;
   user: IUser;
+  isLiked: boolean;
 };
 
 export type IPost = Omit<TPost, 'comments'> & {
+  _id: string;
   user: IUser;
   isLiked: boolean;
   comments: IComment[];
@@ -88,8 +91,8 @@ export const getHomePosts = async () => {
     .populate({ path: 'user', select: 'username _id avatar' })
     .populate({
       path: 'comments',
-      options: { sort: { createdAt: 'desc' } },
-      populate: { path: 'user', select: 'username _id avatar' }
+      options: { sort: { createdAt: 'desc' }, limit: 3 },
+      populate: [{ path: 'user', select: 'username _id avatar' }]
     })
     .lean({ virtuals: true })
     .exec()
@@ -98,8 +101,7 @@ export const getHomePosts = async () => {
         const isLiked = authId
           ? !!post.likes.find((id) => id.toString() === authId)
           : false;
-        const { _id, ...rest } = post;
-        const result = { ...rest, isLiked } as unknown;
+        const result = { ...post, isLiked } as unknown;
         return result as IPost;
       });
     });
