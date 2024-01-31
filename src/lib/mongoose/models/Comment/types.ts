@@ -32,4 +32,6 @@ export type IComment = Omit<TComment, 'user'> & {
   _id: string;
   user: IUser;
   isLiked: boolean;
+  totalLikes: number;
+  totalReplies: number;
 };

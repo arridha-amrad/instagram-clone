@@ -6,6 +6,7 @@ import HeartIconSolid from '@heroicons/react/24/solid/HeartIcon';
 import { Button } from '@nextui-org/react';
 import { likePost as like } from '@/actions/server/post';
 import { IPost } from '@/lib/mongoose/models/Post/types';
+import { useParams } from 'next/navigation';
 
 type Props = {
   post: IPost;
@@ -14,8 +15,15 @@ type Props = {
 const PostLikedButton = ({ post }: Props) => {
   const { isLiked, id } = post;
   const { likePost } = usePostsStore();
+  const param = useParams();
+  console.log(param.postId);
+
   const liked = async () => {
-    likePost(id);
+    if (param.postId) {
+      likePost();
+    } else {
+      likePost(id);
+    }
     await like(id);
   };
   return (

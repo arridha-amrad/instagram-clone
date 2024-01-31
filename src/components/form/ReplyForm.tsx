@@ -7,18 +7,20 @@ import FaceSmileIcon from '@heroicons/react/24/outline/FaceSmileIcon';
 import { Button, Input } from '@nextui-org/react';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 import { useSession } from 'next-auth/react';
-import { FormEvent, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { FormEvent, Ref, forwardRef, useState } from 'react';
 
 type Props = {
   post: IPost;
 };
 
-const ReplyForm = ({ post }: Props) => {
+const ReplyForm = ({ post }: Props, ref: Ref<HTMLInputElement>) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [comment, setComment] = useState('');
   const { data } = useSession();
   const { addComment } = usePostsStore();
   const [loading, setLoading] = useState(false);
+  const param = useParams();
 
   function onClick(emojiData: EmojiClickData, event: MouseEvent) {
     setComment(
@@ -41,7 +43,11 @@ const ReplyForm = ({ post }: Props) => {
         })
       });
       const res = await response.json();
-      addComment(res.comment);
+      if (param.postId) {
+        addComment(res.comment);
+      } else {
+        addComment(res.comment, post.id);
+      }
       setComment('');
     } catch (err) {
       console.log(err);
@@ -54,17 +60,19 @@ const ReplyForm = ({ post }: Props) => {
     <fieldset disabled={loading}>
       <form onSubmit={onSubmit} className="flex items-center relative px-2">
         <Input
+          ref={ref}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           type="text"
-          variant="underlined"
+          variant="flat"
           placeholder="Add comment..."
+          classNames={{ input: ['pr-28'] }}
         />
         {!!comment && (
           <Button
             isLoading={loading}
             type="submit"
-            className="font-semibold"
+            className="absolute top-1/2 -translate-y-1/2 right-12"
             size="sm"
             color="primary"
             variant="solid"
@@ -77,6 +85,7 @@ const ReplyForm = ({ post }: Props) => {
           onClick={() => setShowEmojiPicker((val) => !val)}
           isIconOnly
           size="sm"
+          className="absolute  top-1/2 -translate-y-1/2 right-3"
         >
           <FaceSmileIcon className="w-5 h-5" />
         </Button>
@@ -84,7 +93,7 @@ const ReplyForm = ({ post }: Props) => {
           <div className="absolute right-10 bottom-full z-50 ">
             <div
               onClick={() => setShowEmojiPicker(false)}
-              className="fixed inset-0 bg-background/40"
+              className="fixed inset-0 bg-background/20"
             />
             <EmojiPicker
               onEmojiClick={onClick}
@@ -98,4 +107,4 @@ const ReplyForm = ({ post }: Props) => {
   );
 };
 
-export default ReplyForm;
+export default forwardRef(ReplyForm);

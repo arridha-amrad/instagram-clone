@@ -32,8 +32,6 @@ const SearchDialog = ({ children }: Props) => {
     setIsLoading(true);
     try {
       const data = await searchUser(key);
-      console.log({ data });
-
       setResult(data);
     } catch (err) {
       throw err;

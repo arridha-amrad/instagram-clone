@@ -1,15 +1,26 @@
 import { IComment } from '@/lib/mongoose/models/Comment/types';
+import usePostsStore from '@/lib/zustand/store/postStore';
 import getAvatar from '@/utils/getAvatar';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
+import { likeComment as likeC } from '@/actions/server/comment';
 
 type Props = {
   comment: IComment;
 };
 
 const CommentItemBig = ({ comment }: Props) => {
+  console.log({ comment });
+
+  const { likeComment } = usePostsStore();
+
+  const like = async () => {
+    likeComment(comment.id);
+    await likeC(comment.id);
+  };
+
   return (
     <div className="flex gap-3 w-full items-start px-2">
       <div className="w-10 flex-shrink-0 h-10 overflow-hidden">
@@ -28,7 +39,7 @@ const CommentItemBig = ({ comment }: Props) => {
         <span className="text-sm flex-1">{comment.content}</span>
         <div className="w-full text-skin-accent flex items-center text-sm space-x-3">
           <p>1 day</p>
-          <p>2 likes</p>
+          {comment.totalLikes > 0 && <p>{comment.totalLikes} likes</p>}
           <Button size="sm" color="default" variant="light">
             Reply
           </Button>
@@ -42,6 +53,7 @@ const CommentItemBig = ({ comment }: Props) => {
       </div>
       <div className="">
         <Button
+          onClick={like}
           size="sm"
           variant="light"
           isIconOnly

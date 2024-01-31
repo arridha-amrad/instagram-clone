@@ -65,7 +65,7 @@ export const getHomePosts = async () => {
     .populate({ path: 'user', select: 'username _id avatar' })
     .populate({
       path: 'comments',
-      options: { sort: { createdAt: 'desc' }, limit: 3 },
+      options: { sort: { createdAt: 'desc' } },
       populate: [{ path: 'user', select: 'username _id avatar' }]
     })
     .lean({ virtuals: true })
@@ -75,7 +75,8 @@ export const getHomePosts = async () => {
         const isPostLiked = checkIsExists(post.likes, authId);
         const pComments = post.comments as unknown;
         const comments = pComments as IComment[];
-        const c = comments.map((comment) => {
+        const c = comments.map((comment, i) => {
+          if (i >= 3) return;
           const isLiked = checkIsExists(comment.likes, authId);
           return { ...comment, isLiked };
         });
