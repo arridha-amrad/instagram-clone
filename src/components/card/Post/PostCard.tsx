@@ -40,10 +40,15 @@ export default function PostCard({ post }: Props) {
 
   const images = post.images.map((i) => i.url);
 
+  const height = [...post.images].sort((a, b) => b.height - a.height)[0].height;
+
   return (
     <article className="w-full">
       <UserCardWithTime post={post} />
-      <div className="max-h-[700px] overflow-hidden border border-skin-base">
+      <div
+        style={{ height }}
+        className="max-h-[700px] overflow-hidden border border-skin-base"
+      >
         <ImageCarousel urls={images} />
       </div>
       <div className="h-12 w-full flex items-center justify-between">

@@ -29,7 +29,7 @@ export default function UpdateAbleAvatar({ src }: Props) {
     <>
       <Avatar
         onClick={() => ref.current?.click()}
-        className="w-20 cursor-pointer h-20 md:w-40 md:h-40 text-large"
+        className="w-20 cursor-pointer h-auto aspect-square md:w-40 md:h-40 text-large"
         src={url}
       />
       <input ref={ref} hidden type="file" onChange={onChange} />

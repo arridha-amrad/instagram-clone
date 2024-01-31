@@ -22,12 +22,12 @@ export default function UserCardWithTime({ post }: Props) {
   const avatar = post.user.avatar ?? `${baseURL}/default_avatar.jpg`;
   const date = Intl.DateTimeFormat('en-US').format(new Date(post.createdAt));
   return (
-    <div className="flex justify-between py-2 px-2">
+    <div className="flex justify-between py-2">
       <div className="flex items-center gap-4">
         <Image
           width={45}
           height={45}
-          className="rounded-full"
+          className="rounded-full flex-shrink-0 w-[40px] h-auto aspect-square"
           alt="avatar"
           src={avatar}
         />

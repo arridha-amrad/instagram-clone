@@ -45,8 +45,9 @@ export default function ImageCarousel({ urls }: Props) {
       <Image
         alt="preview"
         src={urls[previewIndex]}
-        height={1000}
-        width={1000}
+        height={500}
+        width={500}
+        priority
         className="object-cover w-full h-full"
       />
       {total > 1 && (

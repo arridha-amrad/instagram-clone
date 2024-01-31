@@ -99,16 +99,21 @@ export default function CreateBtn() {
                   </div>
                 )}
               </ModalHeader>
-              <ModalBody className="flex items-center justify-center">
+              <ModalBody className="flex w-full h-full items-center justify-center">
                 {preview.length > 0 ? (
                   <div className="flex gap-2 w-full h-full">
-                    <Carousel urls={preview} />
-                    <PostForm
-                      onClose={onClose}
-                      loading={loading}
-                      fileList={fileList}
-                      setLoading={setLoading}
-                    />
+                    <div className="w-full h-full">
+                      <Carousel urls={preview} />
+                    </div>
+                    <div className="max-w-[40%] w-full h-full">
+                      <PostForm
+                        ref={btnSubmitRef}
+                        onClose={onClose}
+                        loading={loading}
+                        fileList={fileList}
+                        setLoading={setLoading}
+                      />
+                    </div>
                   </div>
                 ) : (
                   <div className="flex items-center justify-center flex-col gap-4">

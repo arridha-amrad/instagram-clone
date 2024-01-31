@@ -33,6 +33,7 @@ const Story = ({ url }: Props, ref: Ref<HTMLDivElement>) => {
             width={40}
             height={40}
             alt="story"
+            priority
             className="rounded-full w-10 sm:w-12 aspect-square"
             src={url}
           />

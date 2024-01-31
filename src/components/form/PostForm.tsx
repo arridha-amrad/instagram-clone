@@ -7,7 +7,14 @@ import MapPinIcon from '@heroicons/react/24/solid/MapPinIcon';
 import { Input, User } from '@nextui-org/react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Dispatch, Ref, SetStateAction, forwardRef, useState } from 'react';
+import {
+  Dispatch,
+  FormEvent,
+  Ref,
+  SetStateAction,
+  forwardRef,
+  useState
+} from 'react';
 
 type Props = {
   setLoading: Dispatch<SetStateAction<boolean>>;
@@ -26,7 +33,8 @@ const PostForm = (
   const router = useRouter();
   const { addPost } = usePostsStore();
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
     if (!auth) {
       router.replace('/accounts/login');
       return;
@@ -55,25 +63,27 @@ const PostForm = (
   };
 
   return (
-    <fieldset disabled={loading}>
+    <fieldset className="w-full h-full" disabled={loading}>
       <form
         onSubmit={onSubmit}
-        className="w-full flex flex-col items-start gap-4 pl-4 py-2 max-w-xs h-full"
+        className="w-full flex flex-col items-start gap-4 pl-4 py-2 h-full"
       >
-        <User
-          name={auth?.user.username}
-          avatarProps={{ src: getAvatar(auth?.user.avatar) }}
-        />
-        <textarea
-          onChange={(e) => setDescription(e.target.value)}
-          value={description}
-          className="h-full bg-transparent outline-none w-full rounded-lg resize-none"
-          placeholder="Enter your description"
-        />
+        <div className="flex-1 h-full">
+          <User
+            name={auth?.user.username}
+            avatarProps={{ src: getAvatar(auth?.user.avatar) }}
+          />
+          <textarea
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+            className="h-full bg-transparent outline-none w-full rounded-lg resize-none"
+            placeholder="Enter your description"
+          />
+        </div>
         <Input
           onChange={(e) => setLocation(e.target.value)}
           value={location}
-          variant="faded"
+          variant="flat"
           endContent={<MapPinIcon className="w-6 h-6" />}
           placeholder="Add Location"
         />

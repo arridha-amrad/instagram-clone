@@ -4,6 +4,8 @@ import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 export type TImage = {
   url: string;
   publicId: string;
+  height: number;
+  width: number;
 };
 
 export type TPost = {
@@ -28,7 +30,9 @@ type TPostModel = Model<TPost, {}, {}, TPostVirtual>;
 const imageSchema = new mongoose.Schema<TImage>(
   {
     publicId: String,
-    url: String
+    url: String,
+    height: Number,
+    width: Number
   },
   { _id: false }
 );

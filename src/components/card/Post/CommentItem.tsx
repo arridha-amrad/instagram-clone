@@ -18,7 +18,7 @@ const CommentItem = ({ comment }: Props) => {
           size="sm"
           variant="light"
           isIconOnly
-          startContent={<HeartIcon className="w-5 h-5" />}
+          startContent={<HeartIcon className="w-4 h-4" />}
         />
       </div>
     </div>

@@ -23,7 +23,7 @@ export const getSearchHistories = unstable_cache(
   async () => {
     const session = await getServerSideSession();
     await dbConnect();
-    if (!session) return;
+    if (!session) return [];
     const users = await User.findById(session.user.id)
       .populate({
         path: 'searchedUsers',
@@ -36,7 +36,6 @@ export const getSearchHistories = unstable_cache(
         const users = data.searchedUsers as unknown;
         return users as TUser[];
       });
-    console.log({ users });
     return users;
   },
   ['search-history'],
@@ -64,7 +63,7 @@ export const addToSearchHistory = async (id: string) => {
 export const searchUser = async (key: string) => {
   try {
     const response = await fetch(`${baseURL}/api/user/search/${key}`, {
-      next: { tags: [`searchkey-${key}`] }
+      next: { tags: [`search-user-${key}`] }
     });
     const data = await response.json();
     return data;

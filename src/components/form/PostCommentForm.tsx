@@ -81,7 +81,7 @@ const PostCommentForm = ({ post }: Props) => {
           <FaceSmileIcon className="w-5 h-5" />
         </Button>
         {showEmojiPicker && (
-          <div className="absolute right-10 bottom-0 z-50 ">
+          <div className="absolute right-10 bottom-full z-50 ">
             <div
               onClick={() => setShowEmojiPicker(false)}
               className="fixed inset-0 bg-background/40"

@@ -6,7 +6,7 @@ import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import Post, { TPost } from '@/lib/mongoose/models/Post';
 import dbConnect from '@/lib/mongoose/init';
-import Comment, { TComment } from '@/lib/mongoose/models/Comment';
+import { TComment } from '@/lib/mongoose/models/Comment';
 
 export const likePost = async (postId: string) => {
   const session = await getServerSideSession();

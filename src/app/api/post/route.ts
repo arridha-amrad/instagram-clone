@@ -2,7 +2,6 @@ import { remove, upload } from '@/lib/cloudinary/init';
 import dbConnect from '@/lib/mongoose/init';
 import Post, { TImage } from '@/lib/mongoose/models/Post';
 import { NextRequest, NextResponse } from 'next/server';
-import Comment from '@/lib/mongoose/models/Comment';
 import { IPost } from '@/actions/server/post';
 
 export async function DELETE(req: NextRequest) {
@@ -37,9 +36,7 @@ export async function POST(req: NextRequest) {
     const urls: TImage[] = [];
     for (const file of files) {
       const { secure_url, public_id, height, width } = await upload(file);
-      console.log({ height, width });
-
-      urls.push({ publicId: public_id, url: secure_url });
+      urls.push({ publicId: public_id, url: secure_url, height, width });
     }
 
     const newPost = new Post({
