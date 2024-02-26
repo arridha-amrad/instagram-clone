@@ -36,6 +36,9 @@ export default function UserCardWithTime({ post }: Props) {
           <span className="text-skin-accent font-semibold">
             &nbsp;•&nbsp;{date}
           </span>
+          <div className="font-normal text-sm">
+            <p>{post.location}</p>
+          </div>
         </div>
       </div>
       <PostOptions post={post} />

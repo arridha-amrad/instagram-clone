@@ -32,7 +32,7 @@ export default function ImageCarousel({ urls }: Props) {
     });
   };
   return (
-    <div className="relative group w-full h-full rounded-lg">
+    <div className="relative group overflow-y-hidden w-full h-full rounded-lg">
       {total > 1 && (
         <Button
           onClick={prevPreview}
@@ -48,7 +48,7 @@ export default function ImageCarousel({ urls }: Props) {
         height={500}
         width={500}
         priority
-        className="object-cover w-full h-full"
+        className="object-cover overflow-hidden h-full w-full"
       />
       {total > 1 && (
         <Button

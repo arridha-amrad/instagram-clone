@@ -1,14 +1,14 @@
 'use server';
 
-import getServerSideSession from '@/utils/getServerSideSession';
-import { baseURL } from '../variables';
-import { revalidateTag } from 'next/cache';
-import { redirect } from 'next/navigation';
-import Post from '@/lib/mongoose/models/Post/Post';
 import dbConnect from '@/lib/mongoose/init';
 import { IComment } from '@/lib/mongoose/models/Comment/types';
+import Post from '@/lib/mongoose/models/Post/Post';
 import { IPost } from '@/lib/mongoose/models/Post/types';
 import { checkIsExists } from '@/lib/mongoose/models/Post/utils';
+import getServerSideSession from '@/utils/getServerSideSession';
+import { revalidateTag } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { baseURL } from '../variables';
 
 export const likePost = async (postId: string) => {
   const session = await getServerSideSession();

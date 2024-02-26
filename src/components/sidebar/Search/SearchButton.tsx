@@ -2,9 +2,9 @@
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Button } from '@nextui-org/react';
-import { useSidebarContext } from '../SidebarContext';
-import { createPortal } from 'react-dom';
 import { ReactNode } from 'react';
+import { createPortal } from 'react-dom';
+import { useSidebarContext } from '../SidebarContext';
 
 type Props = {
   children: ReactNode;

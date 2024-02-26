@@ -1,12 +1,12 @@
 'use client';
 
-import { Input, Spacer, Divider, Button } from '@nextui-org/react';
-import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { ReactNode, useEffect, useState } from 'react';
-import Item from './Item';
-import { useSession } from 'next-auth/react';
 import { searchUser } from '@/actions/server/user';
 import { TUser } from '@/lib/mongoose/models/User/types';
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Button, Divider, Input, Spacer } from '@nextui-org/react';
+import { useSession } from 'next-auth/react';
+import { ReactNode, useEffect, useState } from 'react';
+import Item from './Item';
 
 type Props = {
   children: ReactNode;

@@ -9,11 +9,11 @@ import {
   ModalHeader,
   useDisclosure
 } from '@nextui-org/react';
-import { useSidebarContext } from './SidebarContext';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Carousel from '../carousel/ImageCarousel';
 import PostForm from '../form/PostForm';
+import { useSidebarContext } from './SidebarContext';
 
 export default function CreateBtn() {
   const { isDenseSidebar } = useSidebarContext();
@@ -79,7 +79,7 @@ export default function CreateBtn() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       >
-        <ModalContent className="h-[80vh] p-0">
+        <ModalContent className="h-[80vh]">
           {(onClose) => (
             <>
               <ModalHeader className="flex border-b border-skin-base gap-1 items-center justify-center">
@@ -99,10 +99,10 @@ export default function CreateBtn() {
                   </div>
                 )}
               </ModalHeader>
-              <ModalBody className="flex w-full h-full items-center justify-center">
+              <ModalBody className="flex w-full h-full items-center justify-center overflow-hidden">
                 {preview.length > 0 ? (
                   <div className="flex gap-2 w-full h-full">
-                    <div className="w-full h-full">
+                    <div className="w-full h-full overflow-y-hidden">
                       <Carousel urls={preview} />
                     </div>
                     <div className="max-w-[40%] w-full h-full">

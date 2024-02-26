@@ -1,7 +1,7 @@
 import { getPostById } from '@/actions/server/post';
+import PostDetail from '@/components/PostPage/PostDetail';
 import ImageCarousel from '@/components/carousel/ImageCarousel';
 import { unstable_noStore } from 'next/cache';
-import PostDetail from '@/components/PostPage/PostDetail';
 
 type Props = {
   params: {

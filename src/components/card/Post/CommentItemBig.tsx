@@ -1,3 +1,4 @@
+import { likeComment as likeC } from '@/actions/server/comment';
 import { IComment } from '@/lib/mongoose/models/Comment/types';
 import usePostsStore from '@/lib/zustand/store/postStore';
 import getAvatar from '@/utils/getAvatar';
@@ -5,7 +6,6 @@ import { HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
-import { likeComment as likeC } from '@/actions/server/comment';
 
 type Props = {
   comment: IComment;
