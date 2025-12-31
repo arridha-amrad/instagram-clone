@@ -1,7 +1,7 @@
 "use client";
 
 import ChevronIcon from "@/icons/Chevron";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 import {
   autoUpdate,
   FloatingPortal,
@@ -14,7 +14,6 @@ import {
 } from "@floating-ui/react";
 import { Button } from "@headlessui/react";
 import { AnimatePresence, motion } from "motion/react";
-import { signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 import {
   HTMLAttributes,
@@ -35,11 +34,11 @@ import {
   SunIcon,
 } from "./Icons";
 
-import LogoutDialog from "@/components/LogoutDialog";
+import LogoutDialog from "@/components/dialog/LogoutDialog";
 import MySwitch from "@/components/MySwitch";
-import { page } from "@/lib/pages";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import LogoutButton from "@/features/auth/logout/LogoutButton";
 
 export default function Options() {
   const [open, setOpen] = useState(false);
@@ -64,14 +63,6 @@ export default function Options() {
   const { theme } = useTheme();
 
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-  const logout = async () => {
-    await signOut({ redirect: false });
-    startTransition(async () => {
-      await new Promise((res) => setTimeout(res, 1000));
-      router.replace(page.login, { scroll: false });
-    });
-  };
 
   const t = useTranslations("Sidebar");
   return (
@@ -101,7 +92,7 @@ export default function Options() {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 10, opacity: 0 }}
                 className={cn(
-                  "bg-skin-elevated-separator w-max space-y-2 overflow-hidden rounded-lg p-2 drop-shadow-sm",
+                  "bg-skin-elevated-separator w-max space-y-2 overflow-hidden rounded-lg p-2 drop-shadow-sm"
                 )}
               >
                 {openTheme ? (
@@ -148,7 +139,8 @@ export default function Options() {
                     />
                     <hr className="bg-skin-muted/20 my-2 h-px w-full border-0" />
                     <OptionsButton label={t("switchAccount")} />
-                    <OptionsButton onClick={logout} label={t("logout")} />
+                    <LogoutButton st={startTransition} />
+                    {/* <OptionsButton onClick={logout} label={t("logout")} /> */}
                   </>
                 )}
               </motion.div>
@@ -156,7 +148,7 @@ export default function Options() {
           </FloatingPortal>
         )}
       </AnimatePresence>
-      <LogoutDialog isPending={isPending} />
+      <LogoutDialog open={isPending} />
     </>
   );
 }
@@ -182,7 +174,7 @@ export function SwitchTheme() {
   );
 }
 
-const OptionsButton = ({
+export const OptionsButton = ({
   icon,
   label,
   ...props

@@ -1,18 +1,18 @@
 "use client";
 
 import AvatarWithStoryIndicator from "@/components/AvatarWithStoryIndicator";
-import {
-  removeUserFromSearchHistory,
-  saveUserToSearchHistory,
-} from "@/lib/actions/user";
-import { TSearchUser } from "@/lib/drizzle/queries/users/fetchSearchHistories";
-import { page } from "@/lib/pages";
+// import {
+//   removeUserFromSearchHistory,
+//   saveUserToSearchHistory,
+// } from "@/lib/actions/user";
+// import { TSearchUser } from "@/lib/drizzle/queries/users/fetchSearchHistories";
+// import { page } from "@/lib/pages";
 import { usePathname } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
 import { useTransition } from "react";
 
 type Props = {
-  user: TSearchUser;
+  user: any;
   isRemovable: boolean;
 };
 
@@ -23,17 +23,17 @@ export default function UserCard({ user, isRemovable }: Props) {
   const [, startTransition] = useTransition();
 
   const navigateToUserProfile = () => {
-    startTransition(() => {
-      saveUserToSearchHistory.bind(null, pathname)({ searchId: user.id });
-      router.push(page.profile(user.username), { scroll: false });
-    });
+    // startTransition(() => {
+    //   saveUserToSearchHistory.bind(null, pathname)({ searchId: user.id });
+    //   router.push(page.profile(user.username), { scroll: false });
+    // });
   };
 
   const remove = async () => {
-    await removeUserFromSearchHistory.bind(
-      null,
-      pathname,
-    )({ searchId: user.id });
+    // await removeUserFromSearchHistory.bind(
+    //   null,
+    //   pathname,
+    // )({ searchId: user.id });
   };
 
   return (

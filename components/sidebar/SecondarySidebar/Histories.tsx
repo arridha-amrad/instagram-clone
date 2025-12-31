@@ -4,7 +4,7 @@ import { Button } from "@headlessui/react";
 import { useSidebarContext } from "../Context";
 import UserCard from "../UserCard";
 import { usePathname } from "next/navigation";
-import { removeAllSearchHistories } from "@/lib/actions/user";
+// import { removeAllSearchHistories } from "@/lib/actions/user";
 import { useTranslations } from "next-intl";
 
 function Histories() {
@@ -12,7 +12,7 @@ function Histories() {
 
   const pathname = usePathname();
   const removeAll = async () => {
-    await removeAllSearchHistories.bind(null, pathname)();
+    // await removeAllSearchHistories.bind(null, pathname)();
   };
 
   const t = useTranslations("Search");

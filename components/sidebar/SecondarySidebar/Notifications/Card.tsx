@@ -2,9 +2,9 @@
 
 import AvatarWithStoryIndicator from "@/components/AvatarWithStoryIndicator";
 import Spinner from "@/components/Spinner";
-import { TNotification } from "@/lib/drizzle/queries/users/fetchUserNotifications";
-import { page } from "@/lib/pages";
-import { cn, rgbDataURL } from "@/lib/utils";
+// import { TNotification } from "@/lib/drizzle/queries/users/fetchUserNotifications";
+// import { page } from "@/lib/pages";
+import { cn } from "@/utils";
 import { formatDistanceToNowStrict } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,7 +14,7 @@ import { acceptFollow, declineFollow } from "./action";
 import { useTranslations } from "next-intl";
 
 type Props = {
-  notification: TNotification;
+  notification: any;
 };
 
 function NotificationCard({
@@ -98,10 +98,10 @@ function NotificationCard({
           <p className="font-medium">{actorUsername}</p>
           <p>{t("commented")} :</p>
           <p className="space-x-1">
-            {replyData?.split(" ").map((v, i) =>
+            {replyData?.split(" ").map((v: any, i: number) =>
               v.startsWith("@") ? (
                 <Link
-                  href={page.profile(v.slice(1))}
+                  href={"/" + v.slice(1)}
                   className="text-skin-primary"
                   key={i}
                 >
@@ -109,7 +109,7 @@ function NotificationCard({
                 </Link>
               ) : (
                 <span key={i}>&nbsp;{v}</span>
-              ),
+              )
             )}
           </p>
           <p className="text-foreground/50 font-light">{timeAgo}</p>
@@ -162,11 +162,11 @@ function NotificationCard({
     <div
       onClick={() => {
         if (postId) {
-          router.push(page.postDetail(postId), { scroll: false });
+          // router.push(page.postDetail(postId), { scroll: false });
         }
       }}
       className={cn(
-        "hover:bg-foreground/5 relative flex cursor-pointer items-center gap-2 px-4 py-2 text-sm",
+        "hover:bg-foreground/5 relative flex cursor-pointer items-center gap-2 px-4 py-2 text-sm"
       )}
     >
       {isPending && (
@@ -185,7 +185,7 @@ function NotificationCard({
         <div className="size-[44px] shrink-0 overflow-hidden rounded-lg">
           <Image
             placeholder="blur"
-            blurDataURL={rgbDataURL(60, 60, 60)}
+            // blurDataURL={rgbDataURL(60, 60, 60)}
             src={postData ? postData[0].url : ""}
             alt="post data"
             width={100}

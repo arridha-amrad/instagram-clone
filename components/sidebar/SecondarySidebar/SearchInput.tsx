@@ -1,7 +1,7 @@
 "use client";
 
 import Spinner from "@/components/Spinner";
-import { TSearchUser } from "@/lib/drizzle/queries/users/fetchSearchHistories";
+// import { TSearchUser } from "@/lib/drizzle/queries/users/fetchSearchHistories";
 import { Button, Input } from "@headlessui/react";
 import {
   Dispatch,
@@ -11,14 +11,14 @@ import {
   useEffect,
   useRef,
 } from "react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { CloseIcon } from "../Icons";
 import { useTranslations } from "next-intl";
 
 const searchUser = async (username: string) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/${username}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/${username}`
     );
     if (!res.ok) {
       throw new Error("Failed to search user");
@@ -32,7 +32,7 @@ const searchUser = async (username: string) => {
 type Props = {
   loading: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
-  setSearchResult: Dispatch<SetStateAction<TSearchUser[]>>;
+  setSearchResult: Dispatch<SetStateAction<any[]>>;
   setSearchKey: Dispatch<SetStateAction<string>>;
   searchKey: string;
   valueKey: string;
@@ -53,7 +53,7 @@ function SearchInput({
     e.preventDefault();
     setLoading(true);
     try {
-      const users = (await searchUser(valueKey)) as TSearchUser[];
+      const users = (await searchUser(valueKey)) as any[];
       setSearchResult(users);
     } catch {
       toast.error("Failed to perform search");

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono, Cookie } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import { NextIntlClientProvider } from "next-intl";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,7 +36,7 @@ export default function RootLayout({
         className={`${inter.className} ${cookie.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" enableSystem>
-          {children}
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </ThemeProvider>
       </body>
     </html>

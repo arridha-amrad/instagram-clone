@@ -5,6 +5,7 @@ export default async function Page() {
 
   return (
     <div>
+      <p>hello</p>
       <h1>{JSON.stringify(session?.user)}</h1>
     </div>
   );

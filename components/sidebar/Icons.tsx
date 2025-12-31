@@ -301,7 +301,7 @@ export function IGLogo() {
 export function Logo() {
   return (
     <div>
-      <h1 className="font-title text-3xl">Nextgram</h1>
+      <h1 className="font-title text-4xl">Instagram</h1>
     </div>
   );
 }

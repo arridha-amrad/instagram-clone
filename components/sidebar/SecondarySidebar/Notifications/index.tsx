@@ -1,9 +1,9 @@
-import { TNotification } from "@/lib/drizzle/queries/users/fetchUserNotifications";
+// import { TNotification } from "@/lib/drizzle/queries/users/fetchUserNotifications";
 import { format, isThisWeek, isToday, isYesterday, parseISO } from "date-fns";
 import { useSidebarContext } from "../../Context";
 import NotificationCard from "./Card";
 import { useEffect, useMemo } from "react";
-import { readNotifications } from "./action";
+// import { readNotifications } from "./action";
 
 function getLabel(dateString: string): string {
   const date = parseISO(dateString);
@@ -14,7 +14,7 @@ function getLabel(dateString: string): string {
   return format(date, "MMM d"); // fallback to readable date
 }
 
-function groupByDateLabel(items: TNotification[]) {
+function groupByDateLabel(items: any[]) {
   const grouped: Record<string, typeof items> = {};
 
   items.forEach((item) => {
@@ -39,7 +39,7 @@ function Notifications() {
     return () => {
       if (unreadIds.length > 0) {
         markNotificationAsRead();
-        readNotifications({ ids: unreadIds });
+        // readNotifications({ ids: unreadIds });
       }
     };
     // eslint-disable-next-line

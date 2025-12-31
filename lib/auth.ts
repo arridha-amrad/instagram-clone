@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { user as userTable } from "./drizzle/schema";
 import { cache } from "react";
 import { headers } from "next/headers";
+import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -42,6 +43,7 @@ export const auth = betterAuth({
       },
     },
   },
+  plugins: [nextCookies()],
 });
 
 export type Session = typeof auth.$Infer.Session;

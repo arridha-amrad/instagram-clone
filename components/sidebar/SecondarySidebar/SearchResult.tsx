@@ -1,8 +1,8 @@
-import { TSearchUser } from "@/lib/drizzle/queries/users/fetchSearchHistories";
+// import { TSearchUser } from "@/lib/drizzle/queries/users/fetchSearchHistories";
 import UserCard from "../UserCard";
 
 type Props = {
-  users: TSearchUser[];
+  users: any[];
 };
 
 function SearchResult({ users }: Props) {

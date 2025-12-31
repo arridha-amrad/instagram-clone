@@ -1,7 +1,7 @@
 "use client";
 
 import AvatarWithStoryIndicator from "@/components/AvatarWithStoryIndicator";
-import { page } from "@/lib/pages";
+// import { page } from "@/pages";
 import { useTranslations } from "next-intl";
 import { useRouter } from "nextjs-toploader/app";
 import ButtonLink from "./ButtonLink";
@@ -66,20 +66,20 @@ function Links({ avatar, username }: Props) {
       <ButtonLink
         activeIcon={<ExploreFilledIcon />}
         icon={<ExploreOutlinedIcon />}
-        callback={() => router.push(page.explore)}
+        callback={() => router.push("/explore")}
         label={t("explore")}
       />
       <ButtonLink
         activeIcon={<ReelsFilledIcon />}
         icon={<ReelsOutlinedIcon />}
-        callback={() => router.push(page.reels)}
+        callback={() => router.push("/reels")}
         label={t("reels")}
       />
       <ButtonLink
         activeIcon={<MessengerFilledIcon />}
         icon={<MessengerOutlinedIcon />}
-        callback={() => router.push(page.inbox)}
-        activePath={page.inbox}
+        callback={() => router.push("/inbox")}
+        activePath={"/inbox"}
         label={t("messages")}
       />
 
@@ -102,11 +102,11 @@ function Links({ avatar, username }: Props) {
         />
       </div>
 
-      <CreatePostProvider>
+      {/* <CreatePostProvider>
         <NewPostModal>
           <FormCreatePost />
         </NewPostModal>
-      </CreatePostProvider>
+      </CreatePostProvider> */}
 
       <ButtonLink
         icon={
@@ -114,7 +114,7 @@ function Links({ avatar, username }: Props) {
             isStoryExists={false}
             isStoryWatched
             size={32}
-            avatarUrl={avatar}
+            avatarUrl={null}
           />
         }
         callback={() => router.push(`/${username}`)}

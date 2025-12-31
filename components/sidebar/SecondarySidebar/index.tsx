@@ -44,7 +44,7 @@ export default function SecondarySidebar({
                   </h1>
                 </div>
                 {isSearchOpen && <Search />}
-                {isNotificationsOpen && <Notifications />}
+                {/* {isNotificationsOpen && <Notifications />} */}
               </div>
             </motion.div>
           </div>

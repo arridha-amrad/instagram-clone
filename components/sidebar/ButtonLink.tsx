@@ -1,7 +1,7 @@
 "use client";
 
-import { page } from "@/lib/pages";
-import { cn } from "@/lib/utils";
+// import { page } from "@/lib/pages";
+import { cn } from "@/utils";
 import { Button } from "@headlessui/react";
 import { usePathname } from "next/navigation";
 import { HTMLAttributes, ReactNode, Ref } from "react";
@@ -33,7 +33,7 @@ export default function ButtonLink({
 
   const t = useTranslations("SecondarySidebar");
 
-  const isApplySmallSidebar = isSmallSidebar || pathname === page.inbox;
+  const isApplySmallSidebar = isSmallSidebar || pathname === "/inbox";
 
   const currentIcon = () => {
     if (activeIcon) {
@@ -52,7 +52,7 @@ export default function ButtonLink({
     <div
       onClick={callback}
       className={cn(
-        "flex w-max cursor-pointer items-center rounded-lg hover:bg-neutral-500/20",
+        "flex w-max cursor-pointer items-center rounded-lg hover:bg-neutral-500/20"
       )}
       {...props}
       tabIndex={0}
@@ -60,7 +60,7 @@ export default function ButtonLink({
     >
       <Button
         className={cn(
-          "ring-skin-muted flex aspect-square h-12 w-fit cursor-pointer items-center justify-center rounded-lg",
+          "ring-skin-muted flex aspect-square h-12 w-fit cursor-pointer items-center justify-center rounded-lg"
         )}
       >
         {currentIcon()}
@@ -69,7 +69,7 @@ export default function ButtonLink({
         <span
           className={cn(
             "hidden pr-4 pl-2 select-none lg:block",
-            isActive ? "font-medium" : "font-normal",
+            isActive ? "font-medium" : "font-normal"
           )}
         >
           {label}

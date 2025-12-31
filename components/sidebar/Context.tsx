@@ -1,8 +1,8 @@
 "use client";
 
-import { TSearchUser } from "@/lib/drizzle/queries/users/fetchSearchHistories";
-import { TNotification } from "@/lib/drizzle/queries/users/fetchUserNotifications";
-import { page } from "@/lib/pages";
+// import { TSearchUser } from "@/lib/drizzle/queries/users/fetchSearchHistories";
+// import { TNotification } from "@/lib/drizzle/queries/users/fetchUserNotifications";
+// import { page } from "@/lib/pages";
 import { usePathname } from "next/navigation";
 import {
   createContext,
@@ -22,9 +22,9 @@ type TContext = {
   isSearchOpen: boolean;
   setSearchOpen: Dispatch<SetStateAction<boolean>>;
   closeSecondarySidebar: () => void;
-  histories: TSearchUser[];
-  searchResult: TSearchUser[];
-  notifications: TNotification[];
+  histories: any[];
+  searchResult: any[];
+  notifications: any[];
   markNotificationAsRead: () => void;
 };
 
@@ -49,22 +49,21 @@ export const SidebarProvider = ({
   notificationsData,
 }: {
   children: ReactNode;
-  histories: TSearchUser[];
-  searchResult: TSearchUser[];
-  notificationsData: TNotification[];
+  histories: any[];
+  searchResult: any[];
+  notificationsData: any[];
 }) => {
   const [isSmallSidebar, setSmallSidebar] = useState(false);
   const [isSearchOpen, setSearchOpen] = useState(false);
   const [isNotificationsOpen, setNotificationsOpen] = useState(false);
-  const [notifications, setNotifications] =
-    useState<TNotification[]>(notificationsData);
+  const [notifications, setNotifications] = useState<any[]>(notificationsData);
 
   const pathname = usePathname();
 
   const closeSecondarySidebar = () => {
     setSearchOpen(false);
     setNotificationsOpen(false);
-    if (pathname !== page.inbox) {
+    if (pathname !== "/inbox") {
       setSmallSidebar(false);
     }
   };
@@ -81,7 +80,7 @@ export const SidebarProvider = ({
   }, [isSearchOpen, isNotificationsOpen]);
 
   useEffect(() => {
-    if (!isSearchOpen && !isNotificationsOpen && pathname !== page.inbox) {
+    if (!isSearchOpen && !isNotificationsOpen && pathname !== "/inbox") {
       setSmallSidebar(false);
     }
   }, [isSearchOpen, isNotificationsOpen, pathname]);
