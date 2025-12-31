@@ -1,10 +1,10 @@
-import Sidebar from "@/components/sidebar";
+import { Sidebar } from "@/components/Sidebar";
 import { ReactNode } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen container mx-auto">
-      <Sidebar avatar="" username="" users={[]} notifications={[]} />
+      <Sidebar />
       {children}
     </div>
   );

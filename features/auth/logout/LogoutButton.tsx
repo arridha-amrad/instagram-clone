@@ -1,4 +1,4 @@
-import { OptionsButton } from "@/components/sidebar/Options";
+import { OptionsButton } from "@/components/sidebarOld/Options";
 import { authClient } from "@/lib/authClient";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";

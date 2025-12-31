@@ -1,12 +1,17 @@
-import { getServerSideSession } from "@/lib/auth";
+import AuthUser from "@/components/AuthUser";
+import { Suspense } from "react";
 
 export default async function Page() {
-  const session = await getServerSideSession();
-
   return (
-    <div>
-      <p>hello</p>
-      <h1>{JSON.stringify(session?.user)}</h1>
-    </div>
+    <>
+      <main className="flex-1">
+        <h1>hello</h1>
+      </main>
+      <aside className="lg:w-xs flex flex-col h-screen px-2 py-8">
+        <Suspense fallback={<div>Loading...</div>}>
+          <AuthUser />
+        </Suspense>
+      </aside>
+    </>
   );
 }
