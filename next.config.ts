@@ -4,7 +4,18 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
-  images: {},
+  images: {
+    remotePatterns: [
+      {
+        hostname: "cdn.jsdelivr.net",
+        protocol: "https",
+      },
+      {
+        hostname: "avatars.githubusercontent.com",
+        protocol: "https",
+      },
+    ],
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();

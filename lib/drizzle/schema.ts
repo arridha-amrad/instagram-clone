@@ -1,5 +1,15 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  index,
+  uuid,
+  unique,
+  pgEnum,
+  integer,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -77,6 +87,67 @@ export const verification = pgTable(
   },
   (table) => [index("verification_identifier_idx").on(table.identifier)]
 );
+
+export const post = pgTable("post", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  caption: text("caption"),
+  location: text("location"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  aspectRatio: text("aspect_ratio").default("1:1").notNull(),
+});
+export const postRelations = relations(post, ({ one, many }) => ({
+  owner: one(user, {
+    fields: [post.userId],
+    references: [user.id],
+  }),
+  media: many(postMedia), // Satu post punya banyak media
+  likes: many(postLike),
+}));
+
+export const mediaTypeEnum = pgEnum("media_type", ["image", "video"]);
+export const postMedia = pgTable("post_media", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  postId: uuid("postId")
+    .notNull()
+    .references(() => post.id, { onDelete: "cascade" }),
+  url: text("url").notNull(),
+  type: mediaTypeEnum("type").notNull().default("image"),
+  order: integer("order").notNull().default(0), // Untuk urutan slide (1, 2, 3...)
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+export const postMediaRelations = relations(postMedia, ({ one }) => ({
+  post: one(post, {
+    fields: [postMedia.postId],
+    references: [post.id],
+  }),
+}));
+
+export const postLike = pgTable(
+  "post_like",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("userId")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    postId: uuid("postId")
+      .notNull()
+      .references(() => post.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [unique().on(table.userId, table.postId)]
+);
+export const postLikeRelations = relations(postLike, ({ one }) => ({
+  post: one(post, {
+    fields: [postLike.postId],
+    references: [post.id],
+  }),
+}));
+
+// ================== RELATIONS ===============
 
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),

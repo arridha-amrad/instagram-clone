@@ -15,6 +15,20 @@
       "when": 1767186714531,
       "tag": "0001_new_nicolaos",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767261556730,
+      "tag": "0002_far_black_widow",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1767261856395,
+      "tag": "0003_tiny_shockwave",
+      "breakpoints": true
     }
   ]
 }

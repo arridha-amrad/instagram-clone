@@ -36,7 +36,7 @@
   }
 
   .dark {
-    --background: #0a0a0a;
+    --background: rgb(12, 16, 20);
     --bg-secondary: rgb(38, 38, 38);
     --foreground: #ededed;
     --color-skin-primary: rgb(0, 149, 246);
