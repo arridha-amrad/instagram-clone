@@ -17,6 +17,7 @@ import {
   ActivityIcon,
   BellIcon,
   Compass,
+  File,
   HomeIcon,
   Menu,
   MessageSquareQuote,
@@ -43,7 +44,6 @@ import {
 } from "react";
 import LogoutDialog from "./dialog/LogoutDialog";
 import MySwitch from "./MySwitch";
-import { ReportProblemIcon } from "./sidebarOld/Icons";
 import InstagramIcon from "./svg/instagram";
 
 type SidebarProps = {
@@ -255,7 +255,7 @@ function MoreOptions() {
                       label={t("switchAccount")}
                     />
                     <OptionsButton
-                      icon={<ReportProblemIcon />}
+                      icon={<File />}
                       label={t("reportAProblem")}
                     />
                     <hr className="bg-skin-muted/20 my-2 h-px w-full border-0" />
@@ -294,7 +294,7 @@ export function SwitchTheme() {
   );
 }
 
-const OptionsButton = ({
+export const OptionsButton = ({
   icon,
   label,
   ...props

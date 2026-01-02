@@ -3,6 +3,8 @@ import { sql } from "drizzle-orm";
 
 export const fetchFeedPosts = async (currentUserId: string) => {
   const posts = await db.query.post.findMany({
+    limit: 10,
+    orderBy: (post, { desc }) => [desc(post.createdAt)],
     with: {
       owner: {
         columns: {
@@ -16,11 +18,11 @@ export const fetchFeedPosts = async (currentUserId: string) => {
     },
     extras: {
       totalLikes:
-        sql`(select count(*) from "post_like" where "post_like"."postId" = "post"."id")`.as(
+        sql<number>`(select count(*) from "post_like" where "post_like"."post_id" = "post"."id")`.as(
           "likes_count"
         ),
       isLiked:
-        sql`(select exists(select 1 from "post_like" where "post_like"."postId" = "post"."id" and "post_like"."userId" = ${currentUserId}))`.as(
+        sql<boolean>`(select exists(select 1 from "post_like" where "post_like"."post_id" = "post"."id" and "post_like"."user_id" = ${currentUserId}))`.as(
           "is_liked"
         ),
     },

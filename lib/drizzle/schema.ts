@@ -90,7 +90,7 @@ export const verification = pgTable(
 
 export const post = pgTable("post", {
   id: uuid("id").primaryKey().defaultRandom(),
-  userId: text("userId")
+  userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   caption: text("caption"),
@@ -111,7 +111,7 @@ export const postRelations = relations(post, ({ one, many }) => ({
 export const mediaTypeEnum = pgEnum("media_type", ["image", "video"]);
 export const postMedia = pgTable("post_media", {
   id: uuid("id").primaryKey().defaultRandom(),
-  postId: uuid("postId")
+  postId: uuid("post_id")
     .notNull()
     .references(() => post.id, { onDelete: "cascade" }),
   url: text("url").notNull(),
@@ -130,10 +130,10 @@ export const postLike = pgTable(
   "post_like",
   {
     id: uuid("id").primaryKey().defaultRandom(),
-    userId: text("userId")
+    userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    postId: uuid("postId")
+    postId: uuid("post_id")
       .notNull()
       .references(() => post.id, { onDelete: "cascade" }),
     createdAt: timestamp("created_at").notNull().defaultNow(),

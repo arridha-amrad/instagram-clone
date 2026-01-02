@@ -1,16 +1,13 @@
-import { env } from "@/env";
 import * as schema from "@/lib/drizzle/schema";
 import { hashPassword, generateRandomString } from "better-auth/crypto";
 import { faker } from "@faker-js/faker";
-import { drizzle } from "drizzle-orm/neon-serverless";
-
-const db = drizzle(env.dbUrl!, { schema });
+import db from "@/lib/drizzle/db";
 
 const main = async () => {
   const promises = Array.from({ length: 10 }).map(async () => {
     const id = generateRandomString(32);
     const password = await hashPassword("123");
-    await db.transaction(async (tx) => {
+    return db.transaction(async (tx) => {
       await tx.insert(schema.user).values({
         email: faker.internet.email().toLowerCase(),
         username: faker.internet.username().toLowerCase(),
